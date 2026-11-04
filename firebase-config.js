@@ -12,7 +12,7 @@ export const firebaseConfig = {
 
 // Web client ID fra Firebase: Authentication → Sign-in method → Google → Web SDK configuration.
 // Brukes av Googles egen innloggingsknapp, som også virker i Safari på iPhone.
-export const googleClientId = "277222704530-20dft5fa37hhtcbgeqgd9ckukdpu5tob.apps.googleusercontent.com";
+export const googleClientId = "516416369747-4dk270pgo8v8olg0baersi2vvh9nams9.apps.googleusercontent.com";
 
 // Valgfritt: e-postadressen som får logge inn, for en tydeligere feilmelding på siden.
 // Står tom fordi repoet er offentlig. Reglene i Firestore stenger uansett alle andre kontoer ute.
