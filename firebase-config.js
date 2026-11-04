@@ -11,7 +11,8 @@ export const firebaseConfig = {
 };
 
 // Web client ID fra Firebase: Authentication → Sign-in method → Google → Web SDK configuration.
-// Brukes av Googles egen innloggingsknapp, som også virker i Safari på iPhone.
+// Innloggingen sender hele siden til Google og tilbake. Klienten må ha https://janewl.github.io som
+// Authorized JavaScript origin og https://janewl.github.io/amsterdam2027/ som Authorized redirect URI.
 export const googleClientId = "342198081819-n2tvaflb5ogcrp9jmjc0hcicrhv4dprp.apps.googleusercontent.com";
 
 // Valgfritt: e-postadressen som får logge inn, for en tydeligere feilmelding på siden.

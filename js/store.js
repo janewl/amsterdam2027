@@ -95,6 +95,7 @@ export function initStore(){
         try{ db=F.initializeFirestore(fbApp,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})}); }
         catch(e){ db=F.getFirestore(fbApp); }
         try{ await A.getRedirectResult(auth); }catch(e){}
+        await finishGoogleRedirect();
         A.onAuthStateChanged(auth,async u=>{
           if(u&&allowedEmail&&(u.email||"").toLowerCase()!==allowedEmail.toLowerCase()){
             state.error=`Kontoen ${u.email} har ikke tilgang. Logg inn med ${allowedEmail}.`;
@@ -114,7 +115,34 @@ export function initStore(){
   });
 }
 
+/* Safari on iPhone blocks both Firebase's popup/redirect (firebaseapp.com is another site) and Google's
+   button popup. So when a client ID is set, we send the whole page to Google and get an ID token back in
+   the URL fragment on our own address, then exchange it for a Firebase session. No popups, no third-party cookies. */
+const REDIRECT_URI=location.origin+location.pathname;
+const rnd=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,"0")).join("");
+
+function googleRedirect(){
+  const st=rnd(), nonce=rnd();
+  try{ sessionStorage.setItem("ma27-oauth",st); }catch(e){}
+  const q=new URLSearchParams({client_id:googleClientId, redirect_uri:REDIRECT_URI, response_type:"id_token",
+    scope:"openid email profile", nonce, state:st, prompt:"select_account"});
+  location.assign("https://accounts.google.com/o/oauth2/v2/auth?"+q);
+}
+
+// Called once Firebase Auth is ready: picks up the token Google sent back, if any.
+async function finishGoogleRedirect(){
+  if(!location.hash||location.hash.indexOf("id_token=")<0&&location.hash.indexOf("error=")<0) return;
+  const h=new URLSearchParams(location.hash.slice(1));
+  history.replaceState(null,"",REDIRECT_URI+location.search);
+  let expected=null; try{ expected=sessionStorage.getItem("ma27-oauth"); sessionStorage.removeItem("ma27-oauth"); }catch(e){}
+  if(h.get("error")){ if(h.get("error")!=="access_denied"){ state.error="Google avviste innloggingen ("+h.get("error")+")."; emit(); } return; }
+  if(!expected||h.get("state")!==expected){ state.error="Innloggingen ble avbrutt. Prøv igjen."; emit(); return; }
+  try{ await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(h.get("id_token"))); }
+  catch(e){ console.error(e); state.error="Innloggingen feilet ("+(e.code||"ukjent feil")+")."; emit(); }
+}
+
 export async function signIn(){
+  if(googleClientId){ googleRedirect(); return; }
   if(!auth){state.error="Skylagringen er ikke klar ennå. Prøv igjen om litt."; emit(); return;}
   const p=new A.GoogleAuthProvider(); p.setCustomParameters({prompt:"select_account"});
   try{ await A.signInWithPopup(auth,p); }
@@ -128,43 +156,5 @@ export async function signIn(){
   }
 }
 export async function signOut(){
-  try{ window.google&&google.accounts&&google.accounts.id.disableAutoSelect(); }catch(e){}
   if(auth) await A.signOut(auth);
-}
-
-/* Safari (iPhone) blocks the Firebase popup/redirect flow because firebaseapp.com is a different site
-   than janewl.github.io. Google's own sign-in button talks to accounts.google.com directly and hands us
-   an ID token, which we exchange for a Firebase session. Used whenever a client ID is configured. */
-export const hasGoogleButton=!!googleClientId;
-let gisReady=null;
-function loadGis(){
-  if(gisReady) return gisReady;
-  gisReady=new Promise((res,rej)=>{
-    const s=document.createElement("script"); s.src="https://accounts.google.com/gsi/client"; s.async=true;
-    s.onload=()=>{
-      google.accounts.id.initialize({
-        client_id:googleClientId,
-        callback:async r=>{
-          try{ await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(r.credential)); }
-          catch(e){ console.error(e); state.error="Innloggingen feilet ("+(e.code||"ukjent feil")+")."; emit(); }
-        },
-        auto_select:false, cancel_on_tap_outside:true
-      });
-      res();
-    };
-    s.onerror=()=>{gisReady=null; rej(new Error("gsi"));};
-    document.head.append(s);
-  });
-  return gisReady;
-}
-export async function renderGoogleButton(el){
-  try{
-    await loadGis(); el.textContent="";
-    const dark=matchMedia("(prefers-color-scheme: dark)").matches;
-    google.accounts.id.renderButton(el,{type:"standard",theme:dark?"filled_black":"outline",size:"large",shape:"pill",text:"signin_with",locale:"no"});
-  }catch(e){
-    // Fall back to the Firebase popup if Google's script can't load.
-    el.textContent=""; const b=document.createElement("button"); b.type="button"; b.className="btn small primary"; b.textContent="Logg inn med Google";
-    b.addEventListener("click",signIn); el.append(b);
-  }
 }
