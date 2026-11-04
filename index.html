@@ -428,7 +428,7 @@ ul.plain{margin:0;padding-left:1.2em;display:grid;gap:4px}
     }
     s.sort((a,b)=>ORDER[a.d]-ORDER[b.d]);
     s.forEach(x=>x.key="w"+w+"-"+x.d+"-"+x.k);
-    const mon=new Date(START); mon.setDate(START.getDate()+(w-1)*7);
+    const mon=new Date(START); mon.setDate(START.getDate()+w*7);
     const sun=new Date(mon); sun.setDate(mon.getDate()+6);
     weeks.push({w,sessions:s,mon,sun,light:LIGHT.has(w)});
   }
