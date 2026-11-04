@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Mot Amsterdam 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: one reading column; header with race facts, then the week-by-week log, then reference sections. */
+:root{
+  --bg:#f3f6f8; --surface:#ffffff; --ink:#13202a; --muted:#566874; --line:#d6dfe5;
+  --accent:#d9480f; --canal:#1d5c86; --iron:#5f4a94; --done:#2b7a4b; --soft:#e8eef2;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e161c; --surface:#15212a; --ink:#e4ebf0; --muted:#94a6b2; --line:#26353f;
+  --accent:#ff8640; --canal:#72b4e2; --iron:#b39ee8; --done:#5fcf8f; --soft:#1c2a34; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e161c; --surface:#15212a; --ink:#e4ebf0; --muted:#94a6b2; --line:#26353f;
+  --accent:#ff8640; --canal:#72b4e2; --iron:#b39ee8; --done:#5fcf8f; --soft:#1c2a34; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.4rem,7vw,3.6rem);letter-spacing:.01em}
+h2{font-size:2rem}
+h3{font-size:1.35rem}
+p{margin:0}
+a{color:var(--canal)}
+.eyebrow{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-size:.95rem}
+header{display:grid;gap:18px}
+.lede{color:var(--muted);max-width:62ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:2px}
+.fact b{font-family:var(--display);font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
+.fact span{color:var(--muted);font-size:.85rem}
+.bar{height:8px;border-radius:99px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--done);transition:width .3s}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{font-family:var(--display);font-weight:600;letter-spacing:.04em;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 14px}
+nav a:hover,nav a:focus-visible{border-color:var(--accent)}
+.status{font-size:.85rem;color:var(--muted)}
+section{display:grid;gap:16px}
+.phase{display:grid;gap:8px}
+.phase-head{display:grid;gap:4px;padding:6px 0 4px;border-bottom:2px solid var(--ink)}
+.phase-head p{color:var(--muted);font-size:.95rem}
+details.week{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+details.week[open]{border-color:var(--muted)}
+details.week.now{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;padding:12px 14px}
+summary::-webkit-details-marker{display:none}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+.wk{font-family:var(--display);font-weight:700;font-size:1.25rem;min-width:4.2em}
+.dates{color:var(--muted);font-variant-numeric:tabular-nums}
+.pill{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
+.pill.light{color:var(--canal)}
+.pill.now{color:var(--accent)}
+.count{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
+.count.full{color:var(--done)}
+ul.sessions{list-style:none;margin:0;padding:0 14px 12px;display:grid;gap:6px}
+.s{display:grid;grid-template-columns:auto 3.2em 1fr;gap:4px 10px;align-items:start;padding:8px 0;border-top:1px solid var(--line)}
+.s input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--done);cursor:pointer}
+.day{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:2px}
+.s .txt{min-width:0;display:grid;gap:2px}
+.s .ttl{font-weight:600}
+.s .info{color:var(--muted);font-size:.95rem}
+.s.is-done .ttl{text-decoration:line-through;text-decoration-color:var(--done)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-right:6px}
+.tag.run{color:var(--canal)} .tag.q{color:var(--accent)} .tag.long{color:var(--canal)} .tag.gym{color:var(--iron)} .tag.race{color:var(--accent)}
+.wu{font-size:.85rem}
+.note{color:var(--muted);font-size:.9rem;padding:0 14px 12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:12px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+td.n{white-space:nowrap;font-variant-numeric:tabular-nums}
+ul.plain{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.callout{border-left:3px solid var(--accent);padding:4px 0 4px 12px;color:var(--ink)}
+.muted{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+@media (max-width:480px){.s{grid-template-columns:auto 1fr}.day{grid-column:2}.s .txt{grid-column:2}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Halvmaraton · 21,0975 km</div>
+    <h1>Mot Amsterdam 2027</h1>
+    <p class="lede">50 uker fra comeback til målgang. Løping og styrke i samme plan, med rolig oppbygging og en lett uke hver fjerde uke. Kryss av økter etter hvert som du gjør dem.</p>
+    <div class="facts">
+      <div class="fact"><b id="daysLeft">–</b><span>dager til løpet (17. okt)</span></div>
+      <div class="fact"><b>2:00:00</b><span>måltid · 5:41 min/km</span></div>
+      <div class="fact"><b id="doneCount">0</b><span id="doneOf">av – økter fullført</span></div>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+    <p class="status" id="status">Laster lagrede avkrysninger …</p>
+    <nav aria-label="Seksjoner">
+      <a href="#plan">Ukeplan</a><a href="#styrke">Styrkeprogram</a><a href="#oppvarming">Oppvarming og tøying</a><a href="#endringer">Når dagen ikke går som planlagt</a>
+    </nav>
+    <p class="callout">Løpsdatoen er satt til søndag 17. oktober 2027. Sjekk den offisielle datoen for TCS Amsterdam Marathon når den er klar, og si fra hvis den avviker.</p>
+  </header>
+
+  <section id="plan">
+    <h2>Ukeplan</h2>
+    <p class="muted">Oppstartsuka er 2.–8. november 2026, og uke 1 starter mandag 9. november. Inneværende uke er markert og åpen. Rolig betyr at du kan prate i hele setninger.</p>
+    <div id="phases"></div>
+  </section>
+
+  <section id="styrke">
+    <h2>Styrkeprogram</h2>
+    <p class="muted">RIR betyr reps i reserve: hvor mange reps du har igjen når settet er ferdig. Øk vekten når du klarer øverste antall reps med riktig RIR.</p>
+    <div class="card">
+      <h3>Mandag: Bein (tung)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Øvelse</th><th>Sett × reps</th><th>RIR</th><th>Kommentar</th></tr></thead>
+        <tbody>
+          <tr><td>Knebøy (eller beinpress)</td><td class="n">4 × 5–6</td><td class="n">2</td><td>Hovedløftet</td></tr>
+          <tr><td>Rumensk markløft</td><td class="n">3 × 8</td><td class="n">2</td><td>Baksiden av lår og hofte</td></tr>
+          <tr><td>Bulgarske utfall</td><td class="n">3 × 8 per bein</td><td class="n">2</td><td>Viktigste løpeøvelse</td></tr>
+          <tr><td>Hip thrust</td><td class="n">3 × 10</td><td class="n">1–2</td><td>Setemuskler</td></tr>
+          <tr><td>Tåhev, strake knær</td><td class="n">3 × 12</td><td class="n">1</td><td>Legg</td></tr>
+          <tr><td>Tåhev, bøyde knær (sittende)</td><td class="n">3 × 15</td><td class="n">1</td><td>Avlaster akillessenen</td></tr>
+          <tr><td>Copenhagen-planke</td><td class="n">3 × 20–30 sek per side</td><td class="n">–</td><td>Innside lår og lyske</td></tr>
+        </tbody></table></div>
+      <p class="muted">Ca. 60 min. Fra mars: start med 3 × 5 bokshopp og 3 × 6 hopp på ett bein.</p>
+    </div>
+    <div class="card">
+      <h3>Onsdag: Overkropp og kjerne</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Øvelse</th><th>Sett × reps</th><th>RIR</th><th>Kommentar</th></tr></thead>
+        <tbody>
+          <tr><td>Benkpress eller manualpress</td><td class="n">4 × 6–8</td><td class="n">2</td><td></td></tr>
+          <tr><td>Pull-ups eller nedtrekk</td><td class="n">4 × 6–10</td><td class="n">2</td><td></td></tr>
+          <tr><td>Sittende roing med kabel</td><td class="n">3 × 10–12</td><td class="n">2</td><td>Øvre rygg</td></tr>
+          <tr><td>Skulderpress med manualer</td><td class="n">3 × 8–10</td><td class="n">2</td><td></td></tr>
+          <tr><td>Face pulls</td><td class="n">3 × 15</td><td class="n">1</td><td>Mot spenningshodepine</td></tr>
+          <tr><td>Band pull-aparts</td><td class="n">2 × 20</td><td class="n">–</td><td>Gjerne mellom settene</td></tr>
+          <tr><td>Pallof press</td><td class="n">3 × 10 per side</td><td class="n">–</td><td>Stabilitet i kjernen</td></tr>
+          <tr><td>Dead bug</td><td class="n">3 × 8 per side</td><td class="n">–</td><td>Kontroll i korsrygg og bekken</td></tr>
+        </tbody></table></div>
+      <p class="muted">Ca. 50–60 min.</p>
+    </div>
+    <div class="card">
+      <h3>Torsdag: Helkropp (lett)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Øvelse</th><th>Sett × reps</th><th>RIR</th><th>Kommentar</th></tr></thead>
+        <tbody>
+          <tr><td>Markløft (konvensjonell eller trap bar)</td><td class="n">3 × 4–5</td><td class="n">3–4</td><td>Moderat vekt, god teknikk</td></tr>
+          <tr><td>Step-ups på kasse</td><td class="n">3 × 8 per bein</td><td class="n">3</td><td>Kontrollert ned</td></tr>
+          <tr><td>Enarms manualroing</td><td class="n">3 × 10 per side</td><td class="n">2</td><td></td></tr>
+          <tr><td>Push-ups eller skråbenk med manualer</td><td class="n">3 × 10–12</td><td class="n">2</td><td></td></tr>
+          <tr><td>Ettbeins rumensk markløft</td><td class="n">2 × 8 per bein</td><td class="n">3</td><td>Balanse og stabilitet</td></tr>
+          <tr><td>Sidebro</td><td class="n">3 × 30 sek per side</td><td class="n">–</td><td></td></tr>
+          <tr><td>Farmer's walk</td><td class="n">3 × 30–40 m</td><td class="n">–</td><td>Grep, kjerne og holdning</td></tr>
+        </tbody></table></div>
+      <p class="muted">Ca. 45 min. Du skal gå ut med følelsen av at du kunne gjort mer.</p>
+    </div>
+    <div class="card">
+      <h3>Endringer gjennom året</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Fase</th><th>Endring</th></tr></thead>
+        <tbody>
+          <tr><td>1 Gjenoppstart<br><span class="muted">nov–des</span></td><td>Mandag: 3 sett knebøy, ett sett mindre på hver beinøvelse, RIR 3. Torsdag: 2 sett per øvelse. Overkropp som vanlig.</td></tr>
+          <tr><td>2 Grunnlag<br><span class="muted">jan–apr</span></td><td>Hele programmet. Hoppøvelser først på mandager fra mars.</td></tr>
+          <tr><td>3 Bygging<br><span class="muted">mai–aug</span></td><td>To økter. Mandag: bein med 3 sett. Onsdag: overkropp + step-ups, tåhev og Copenhagen. Torsdag går ut.</td></tr>
+          <tr><td>4 Spesifikk<br><span class="muted">aug–okt</span></td><td>To økter, samme vekter, 2–3 sett, RIR 3.</td></tr>
+          <tr><td>5 Nedtrapping<br><span class="muted">siste 2 uker</span></td><td>Lette økter med mobilitet, kjerne og noen lette sett tåhev og utfall. Ingen tunge løft de siste 10 dagene.</td></tr>
+        </tbody></table></div>
+      <ul class="plain">
+        <li>Lett uke (hver 4. uke): kutt ett sett per øvelse.</li>
+        <li>Ingen tung beintrening dagen før langtur eller kvalitetsøkt.</li>
+        <li>Støl i legg eller akillessene: tåhev bare med kroppsvekt den uka.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="oppvarming">
+    <h2>Oppvarming og tøying</h2>
+    <p class="muted">Varm opp med bevegelse før økta. Statisk tøying er valgfritt og gjøres etterpå.</p>
+    <div class="grid2">
+      <div class="card" id="wu-rolig">
+        <h3>Før rolig tur og langtur</h3>
+        <ul class="plain"><li>Gå raskt i 3–5 min.</li><li>Løp de første 5 min ekstra rolig.</li></ul>
+        <p class="muted">Etter: gå 3–5 min. Etter langtur: gå 5 min, tøy, og spis og drikk innen en time.</p>
+      </div>
+      <div class="card" id="wu-kval">
+        <h3>Før kvalitetsøkt (ca. 15 min)</h3>
+        <ul class="plain">
+          <li>10 min veldig rolig jogg</li>
+          <li>Høye kneløft og hælspark, 10–15 m hver</li>
+          <li>Beinsving fram/bak og til siden, 10 per bein</li>
+          <li>Utfallsgange med rotasjon, 5 per bein</li>
+          <li>3–4 stigningsløp på 15–20 sek</li>
+        </ul>
+        <p class="muted">Etter: 5–10 min veldig rolig jogg, så litt gåing.</p>
+      </div>
+      <div class="card" id="wu-bein">
+        <h3>Før beindag og helkropp</h3>
+        <ul class="plain">
+          <li>5 min sykkel, roing eller rask gange</li>
+          <li>90/90 hofterotasjon, 8 per side</li>
+          <li>Cossack squat, 6 per side</li>
+          <li>Glute bridge, 12</li>
+          <li>Knebøy med kroppsvekt, 10</li>
+          <li>Utfall bakover, 6 per bein</li>
+          <li>Kne mot vegg (ankel), 10 per side</li>
+          <li>2–3 oppvarmingssett: 50 % × 8, 70 % × 5, 85 % × 2</li>
+        </ul>
+      </div>
+      <div class="card" id="wu-over">
+        <h3>Før overkropp</h3>
+        <ul class="plain">
+          <li>5 min sykkel, roing eller rask gange</li>
+          <li>Band pull-aparts, 15</li>
+          <li>Rotasjon i øvre rygg på alle fire, 8 per side</li>
+          <li>Armsirkler, 10 fram og 10 bak</li>
+          <li>Scapula push-ups, 10</li>
+          <li>Hakeinntrekk, 10</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Valgfri tøying etter økta</h3>
+        <p><b>Etter løping</b> (30–45 sek per side): legg mot vegg med strakt og bøyd kne, hoftebøyer i knestående utfall, lårstrekk stående, duen for sete og hofte.</p>
+        <p><b>Etter beindag:</b> hoftebøyer, sete, bakside lår med strikk, legg.</p>
+        <p><b>Etter overkropp:</b> bryst mot dørkarm, nakke til siden, øvre trapezius, barnets stilling.</p>
+      </div>
+      <div class="card">
+        <h3>Mot spenningshodepine (3–4 min daglig)</h3>
+        <ul class="plain">
+          <li>Hakeinntrekk, 10 rolige</li>
+          <li>Nakkestrekk til siden, 30 sek per side</li>
+          <li>Skulderhev og slipp helt ned, 10</li>
+          <li>Foam roller eller ball på øvre rygg, 1–2 min</li>
+          <li>Rolig pust med lang utpust, 1 min</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Har du dårlig tid, kutt tøyingen etterpå. Ikke kutt oppvarmingen før beindag og kvalitetsøkter.</p>
+  </section>
+
+  <section id="endringer">
+    <h2>Når dagen ikke går som planlagt</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>Du rekker ikke hele økta</h3>
+        <ul class="plain">
+          <li><b>Ikke ta igjen tapte økter.</b> Hopp over og fortsett med neste økt i planen.</li>
+          <li><b>Kort tid til løping:</b> halver lengden og hold tempoet rolig. 15 minutter teller.</li>
+          <li><b>Kort tid til kvalitetsøkt:</b> behold oppvarmingen og kutt antall drag.</li>
+          <li><b>Kort tid på gym (30 min):</b> gjør hovedøvelsen og de to viktigste øvelsene. Beindag: knebøy, bulgarske utfall og tåhev. Overkropp: kjør øvelsene parvis.</li>
+          <li><b>Langturen faller ut lørdag:</b> flytt den til søndag. Går ikke det, dropp den og gjør neste ukes langtur som planlagt.</li>
+          <li><b>Føles beina tunge:</b> gjør kvalitetsøkta om til en rolig tur.</li>
+          <li><b>Vondt underveis:</b> avbryt og gå hjem. Løp aldri gjennom smerte som blir verre.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Hvis uka sprekker</h3>
+        <p>Prioriter i denne rekkefølgen:</p>
+        <ol class="plain">
+          <li>Langturen</li>
+          <li>Beindagen</li>
+          <li>Kvalitetsøkta</li>
+          <li>Rolige turer</li>
+          <li>Overkropp og helkropp</li>
+        </ol>
+        <p><b>Borte fra planen:</b></p>
+        <ul class="plain">
+          <li>Under én uke: fortsett der du er.</li>
+          <li>1–2 uker: gjenta den siste uka du fullførte.</li>
+          <li>Over 2 uker: gå tilbake like mange uker som halvparten av tiden du var borte.</li>
+        </ul>
+        <p class="muted">Det er god buffer i planen. Noen tapte uker endrer ikke målet.</p>
+      </div>
+      <div class="card">
+        <h3>Når du blir syk</h3>
+        <p><b>Halsregelen:</b></p>
+        <ul class="plain">
+          <li><b>Symptomer bare over halsen</b> (tett nese, lett sår hals): du kan gå eller løpe 20–30 min rolig hvis du føler deg ok. Ingen kvalitetsøkt og ingen tung styrke.</li>
+          <li><b>Symptomer under halsen</b> (feber, muskelverk, hoste fra brystet, omgangssyke): ingen trening.</li>
+        </ul>
+        <p><b>Ved feber:</b> vent til du har vært feberfri i minst 24–48 timer uten febernedsettende. Trening med feber kan gi betennelse i hjertemuskelen.</p>
+        <p><b>Tilbake etter sykdom:</b> tren like mange dager rolig som du var syk. Første økt kort og lett, og vent med kvalitetsøkter. Kontakt lege ved brystsmerter, hjertebank eller uvanlig tung pust.</p>
+      </div>
+      <div class="card">
+        <h3>Når du har sovet dårlig</h3>
+        <ul class="plain">
+          <li><b>Én dårlig natt:</b> rolige turer kan gå som planlagt. Gjør kvalitetsøkta om til rolig tur, eller flytt den en dag. På styrke: behold økta, men legg på 1 RIR og kutt ett sett.</li>
+          <li><b>2–3 dårlige netter på rad:</b> gjør resten av uka til en lett uke.</li>
+          <li><b>Stress og fysisk jobb teller som belastning.</b> En helg med mye oppussing er en god grunn til å korte ned langturen.</li>
+          <li>Unngå harde økter sent på kvelden når søvnen er dårlig, og hold koffein til før kl. 14.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Stopp og ta pause hvis du får</h3>
+      <ul class="plain">
+        <li>smerte som blir verre mens du løper</li>
+        <li>smerte på ett bestemt punkt på et bein (legg, fot, hofte)</li>
+        <li>smerte som henger igjen i over 48 timer</li>
+        <li>smerte som gjør at du halter</li>
+      </ul>
+      <p class="muted">Vanlig stølhet er greit. Smerte er ikke greit.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  const START = new Date(2026,10,2); // mandag 2. nov 2026 (uke 0)
+  const RACE = new Date(2027,9,17);
+  const LIGHT = new Set([4,8,12,16,20,24,28,32,36,40,44]);
+  const PHASES = [
+    {n:1,name:"Gjenoppstart",from:0,to:8,desc:"Alt rolig, målt i minutter. Mål: 40–60 min sammenhengende uten å bli støl dagen etter."},
+    {n:2,name:"Grunnlag",from:9,to:24,desc:"Tre turer i uka. Langturen øker fra 8 til 14 km. Stigningsløp fra februar, fartlek fra mars."},
+    {n:3,name:"Bygging",from:25,to:40,desc:"Én kvalitetsøkt i uka. Langtur opp mot 18 km. Styrke ned til to økter."},
+    {n:4,name:"Spesifikk forberedelse",from:41,to:47,desc:"Bli komfortabel i 5:40-tempo. Lengste tur 20 km og generalprøve."},
+    {n:5,name:"Nedtrapping",from:48,to:49,desc:"Mindre volum, litt fart. Ingen tunge løft."}
+  ];
+  // [tirsdag, torsdag (løp), fredag, lørdag]. "K|" = kvalitetsøkt.
+  const RUN = {
+    0:["30 min rolig","","","20–25 min rolig hvis stølheten er borte. Ellers 30–45 min gåtur."],
+    1:["25 min rolig. Gå-pauser er greit.","","","30 min rolig"],
+    2:["30 min rolig","","","35 min rolig"],
+    3:["30 min rolig","","","40 min rolig"],
+    4:["25 min rolig","","","30 min rolig"],
+    5:["30 min rolig","","25 min rolig","45 min rolig"],
+    6:["35 min rolig","","25 min rolig","50 min rolig"],
+    7:["35 min rolig","","30 min rolig","55–60 min rolig"],
+    8:["30 min rolig","","25 min rolig","40 min rolig"],
+    9:["5 km rolig","","4 km rolig","8 km rolig"],
+    10:["5 km rolig","","4 km rolig","9 km rolig"],
+    11:["6 km rolig","","4 km rolig","10 km rolig"],
+    12:["5 km rolig","","3 km rolig","7 km rolig"],
+    13:["6 km rolig + 4 stigningsløp à 15–20 sek","","5 km rolig","10 km rolig"],
+    14:["6 km rolig + 5 stigningsløp","","5 km rolig","11 km rolig"],
+    15:["6 km rolig + 6 stigningsløp","","5 km rolig","12 km rolig"],
+    16:["5 km rolig + 4 stigningsløp","","4 km rolig","8 km rolig"],
+    17:["K|Fartlek: 6 × 2 min litt raskt, 2 min rolig mellom (ca. 7 km)","","5 km rolig","12 km rolig"],
+    18:["K|Fartlek: 7 × 2 min litt raskt, 2 min rolig mellom","","6 km rolig","13 km rolig"],
+    19:["K|Fartlek: 8 × 2 min litt raskt, 2 min rolig mellom","","6 km rolig","13 km rolig"],
+    20:["6 km rolig + 4 stigningsløp","","4 km rolig","10 km rolig"],
+    21:["K|Fartlek: 5 × 3 min litt raskt, 2 min rolig mellom","","6 km rolig","14 km rolig"],
+    22:["K|Fartlek: 6 × 3 min litt raskt, 2 min rolig mellom","","6 km rolig","14 km rolig"],
+    23:["K|Fartlek: 4 × 4 min litt raskt, 2 min rolig mellom","","6 km rolig","14 km rolig"],
+    24:["6 km rolig + 4 stigningsløp","","4 km rolig","10 km lett. Milepæl: 10 km i komfortabelt tempo."],
+    25:["K|Terskel: 2 × 10 min komfortabelt hardt, 2 min pause","","6 km rolig","14 km rolig"],
+    26:["K|Intervaller: 4 × 1 km i 5:20–5:30, 2 min pause","","6 km rolig","15 km rolig"],
+    27:["K|Terskel: 3 × 8 min, 2 min pause","","7 km rolig","15 km rolig"],
+    28:["7 km rolig + 4 stigningsløp","","5 km rolig","11 km rolig"],
+    29:["K|Intervaller: 5 × 1 km i 5:20–5:30, 2 min pause","5 km rolig","6 km rolig","16 km rolig"],
+    30:["K|Terskel: 3 × 10 min, 2 min pause","5 km rolig","6 km rolig","16 km rolig"],
+    31:["K|Intervaller: 6 × 1 km i 5:20–5:30, 2 min pause","5 km rolig","7 km rolig","16 km rolig"],
+    32:["7 km rolig + 4 stigningsløp","","5 km rolig","12 km rolig"],
+    33:["K|Terskel: 2 × 15 min, 3 min pause","6 km rolig","7 km rolig","16 km rolig"],
+    34:["K|Intervaller: 6 × 1 km i 5:20–5:30, 2 min pause","6 km rolig","7 km rolig","17 km rolig"],
+    35:["K|Terskel: 3 × 10 min, 2 min pause","6 km rolig","7 km rolig","17 km rolig"],
+    36:["8 km rolig + 4 stigningsløp","","5 km rolig","12 km rolig"],
+    37:["K|Intervaller: 4 × 1,5 km i 5:25–5:30, 2 min pause","6 km rolig","7 km rolig","17 km rolig"],
+    38:["K|Terskel: 3 × 12 min, 2 min pause","6 km rolig","7 km rolig","18 km rolig"],
+    39:["K|Intervaller: 6 × 1 km i 5:20–5:30, 2 min pause","6 km rolig","7 km rolig","18 km rolig"],
+    40:["8 km rolig + 4 stigningsløp","","5 km rolig","13 km rolig"],
+    41:["K|Løpstempo: 2 × 3 km i 5:35–5:40, 3 min rolig jogg mellom","6 km rolig","7 km rolig","18 km, de siste 4 km i løpstempo"],
+    42:["K|Løpstempo: 3 × 3 km i 5:35–5:40, 3 min rolig jogg mellom","6 km rolig","7 km rolig","19 km rolig"],
+    43:["K|Terskel: 3 × 10 min, 2 min pause","6 km rolig","7 km rolig","20 km rolig. Lengste tur før løpet."],
+    44:["8 km rolig + 4 stigningsløp","","5 km rolig","14 km rolig"],
+    45:["K|Løpstempo: 3 × 3 km i 5:35–5:40","6 km rolig","6 km rolig","Generalprøve: 16 km, de siste 8 km i løpstempo"],
+    46:["K|Løpstempo: 2 × 3 km i 5:35–5:40","6 km rolig","7 km rolig","19 km, de siste 5 km i løpstempo"],
+    47:["K|Løpstempo: 3 × 2 km i 5:35–5:40","6 km rolig","7 km rolig","16 km rolig"],
+    48:["K|Løpstempo: 2 × 2 km, ellers rolig (ca. 7 km)","5 km rolig","5 km rolig","12 km rolig"],
+    49:["K|6 km med 3 × 1 km i løpstempo","4 km rolig + 3 stigningsløp","","Shakeout: 3 km veldig rolig + 3 stigningsløp"]
+  };
+
+  function phaseOf(w){return PHASES.find(p=>w>=p.from&&w<=p.to).n}
+
+  function gym(w){
+    const p=phaseOf(w), light=LIGHT.has(w), out=[];
+    const lt=light?" Lett uke: kutt ett sett per øvelse.":"";
+    if(w===0){
+      out.push({d:"ons",k:"gym",title:"Overkropp og kjerne",info:"Beina er støle, så ta overkroppen i dag. 3 sett per øvelse, RIR 3.",wu:"wu-over"});
+      out.push({d:"tor",k:"walk",title:"Gåtur",info:"30 min rask gange. Hjelper mot stølheten.",wu:"wu-rolig"});
+      out.push({d:"fre",k:"gym",title:"Bein, lett",info:"Bare hvis stølheten er nesten borte: 2 sett knebøy, bulgarske utfall og tåhev, RIR 3–4. Ellers mobilitet og kjerne.",wu:"wu-bein"});
+    } else if(p===1){
+      out.push({d:"man",k:"gym",title:"Bein (redusert)",info:"3 sett knebøy, ett sett mindre på hver beinøvelse, RIR 3."+lt,wu:"wu-bein"});
+      out.push({d:"ons",k:"gym",title:"Overkropp og kjerne",info:"Fullt program."+lt,wu:"wu-over"});
+      out.push({d:"tor",k:"gym",title:"Helkropp lett",info:"2 sett per øvelse."+lt,wu:"wu-bein"});
+    } else if(p===2){
+      out.push({d:"man",k:"gym",title:"Bein",info:(w>=17?"Start med hopp: 3 × 5 bokshopp, 3 × 6 hopp på ett bein. Deretter fullt program.":"Fullt program.")+lt,wu:"wu-bein"});
+      out.push({d:"ons",k:"gym",title:"Overkropp og kjerne",info:"Fullt program."+lt,wu:"wu-over"});
+      out.push({d:"tor",k:"gym",title:"Helkropp lett",info:"Fullt program, RIR 3."+lt,wu:"wu-bein"});
+    } else if(p===3){
+      out.push({d:"man",k:"gym",title:"Bein",info:"3 sett på alle øvelser. Behold hopp."+lt,wu:"wu-bein"});
+      out.push({d:"ons",k:"gym",title:"Overkropp + lette bein",info:"Overkropp som vanlig, pluss step-ups, tåhev og Copenhagen-planke."+lt,wu:"wu-over"});
+    } else if(p===4){
+      out.push({d:"man",k:"gym",title:"Bein, vedlikehold",info:"Samme vekter, 2–3 sett, RIR 3."+lt,wu:"wu-bein"});
+      out.push({d:"ons",k:"gym",title:"Overkropp + lette bein",info:"2–3 sett, RIR 3."+lt,wu:"wu-over"});
+    } else if(w===48){
+      out.push({d:"man",k:"gym",title:"Bein, lett",info:"2 sett per øvelse, RIR 3–4. Siste beinøkt med vekt.",wu:"wu-bein"});
+      out.push({d:"ons",k:"gym",title:"Mobilitet og kjerne",info:"Lett kjerne, band pull-aparts og noen sett tåhev med kroppsvekt.",wu:"wu-over"});
+    } else {
+      out.push({d:"man",k:"gym",title:"Mobilitet og kjerne",info:"Lette sett tåhev og utfall med kroppsvekt. Ingen tunge løft.",wu:"wu-bein"});
+    }
+    return out;
+  }
+
+  function runSession(d,txt,isLong){
+    if(!txt) return null;
+    const q=txt.startsWith("K|"); const t=q?txt.slice(2):txt;
+    return {d,k:isLong?"long":(q?"q":"run"),title:isLong?"Langtur":(q?"Kvalitetsøkt":"Rolig tur"),info:t,wu:q?"wu-kval":"wu-rolig"};
+  }
+
+  const ORDER={man:0,tir:1,ons:2,tor:3,fre:4,"lør":5,"søn":6};
+  const DAYNAME={man:"Man",tir:"Tir",ons:"Ons",tor:"Tor",fre:"Fre","lør":"Lør","søn":"Søn"};
+  const MONTHS=["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"];
+
+  const weeks=[];
+  for(let w=0;w<=49;w++){
+    const r=RUN[w]; const s=[...gym(w)];
+    [runSession("tir",r[0]),runSession("tor",r[1]),runSession("fre",r[2]),runSession("lør",r[3],w!==49&&w!==0)].forEach(x=>x&&s.push(x));
+    if(w===49){
+      const sat=s.find(x=>x.d==="lør"); if(sat){sat.k="run";sat.title="Rolig tur";}
+      s.push({d:"søn",k:"race",title:"Amsterdam halvmaraton",info:"Start rolig: første 5 km i ca. 5:45, deretter 5:40. Øk bare hvis du føler deg sterk etter 15 km.",wu:"wu-kval"});
+    }
+    s.sort((a,b)=>ORDER[a.d]-ORDER[b.d]);
+    s.forEach(x=>x.key="w"+w+"-"+x.d+"-"+x.k);
+    const mon=new Date(START); mon.setDate(START.getDate()+(w-1)*7);
+    const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+    weeks.push({w,sessions:s,mon,sun,light:LIGHT.has(w)});
+  }
+  const TOTAL=weeks.reduce((a,x)=>a+x.sessions.length,0);
+
+  function fmt(a,b){
+    return a.getMonth()===b.getMonth()?`${a.getDate()}.–${b.getDate()}. ${MONTHS[b.getMonth()]}`:`${a.getDate()}. ${MONTHS[a.getMonth()]} – ${b.getDate()}. ${MONTHS[b.getMonth()]}`;
+  }
+
+  const today=new Date(); today.setHours(0,0,0,0);
+  let currentWeek=0;
+  weeks.forEach(x=>{if(today>=x.mon&&today<=new Date(x.sun.getTime()+86399999)) currentWeek=x.w;});
+  if(today>weeks[weeks.length-1].sun) currentWeek=49;
+  const days=Math.round((RACE-today)/86400000);
+  document.getElementById("daysLeft").textContent=days>=0?days:"0";
+
+  const TAGS={walk:["run","Aktiv hvile"],gym:["gym","Styrke"],run:["run","Løp"],q:["q","Kvalitet"],long:["long","Langtur"],race:["race","Løpsdag"]};
+  const host=document.getElementById("phases");
+  const els={}; const weekEls={};
+  PHASES.forEach(p=>{
+    const box=document.createElement("div"); box.className="phase";
+    const head=document.createElement("div"); head.className="phase-head";
+    const h=document.createElement("h3"); h.textContent=`Fase ${p.n} · ${p.name}`;
+    const d=document.createElement("p"); d.textContent=`Uke ${p.from}–${p.to}. ${p.desc}`;
+    head.append(h,d); box.append(head);
+    weeks.filter(x=>x.w>=p.from&&x.w<=p.to).forEach(x=>{
+      const det=document.createElement("details"); det.className="week"+(x.w===currentWeek?" now":"");
+      if(x.w===currentWeek) det.open=true;
+      const sum=document.createElement("summary");
+      sum.innerHTML=`<span class="wk">Uke ${x.w}</span><span class="dates">${fmt(x.mon,x.sun)}</span>`+
+        (x.light?`<span class="pill light">Lett uke</span>`:"")+(x.w===currentWeek?`<span class="pill now">${today<START?"Første uke":"Denne uka"}</span>`:"")+
+        `<span class="count" data-count></span>`;
+      det.append(sum);
+      const ul=document.createElement("ul"); ul.className="sessions";
+      x.sessions.forEach(s=>{
+        const li=document.createElement("li"); li.className="s";
+        const id="cb-"+s.key;
+        const cb=document.createElement("input"); cb.type="checkbox"; cb.id=id; cb.dataset.key=s.key;
+        const day=document.createElement("label"); day.className="day"; day.htmlFor=id; day.textContent=DAYNAME[s.d];
+        const txt=document.createElement("div"); txt.className="txt";
+        const t=document.createElement("label"); t.className="ttl"; t.htmlFor=id;
+        const tg=document.createElement("span"); tg.className="tag "+TAGS[s.k][0]; tg.textContent=TAGS[s.k][1];
+        t.append(tg,document.createTextNode(s.title));
+        const info=document.createElement("span"); info.className="info"; info.textContent=s.info;
+        const wu=document.createElement("a"); wu.className="wu"; wu.href="#"+s.wu; wu.textContent="Oppvarming";
+        txt.append(t,info,wu);
+        li.append(cb,day,txt); ul.append(li);
+        els[s.key]={cb,li};
+        cb.addEventListener("change",()=>{ if(cb.checked) state[s.key]=true; else delete state[s.key]; dirty=true; paint(); persist(); });
+      });
+      det.append(ul);
+      if(x.w===0){const n=document.createElement("p");n.className="note";n.textContent="Oppstartsuke. Det er normalt å bli støl etter den første turen. Ikke løp igjen før stølheten har gitt seg. Gåing og overkropp er fint i mellomtiden.";det.append(n);}
+      if(x.light){const n=document.createElement("p");n.className="note";n.textContent="Lett uke: kroppen bygger seg opp i hvilen. Ikke legg på ekstra.";det.append(n);}
+      box.append(det); weekEls[x.w]={det,count:sum.querySelector("[data-count]"),keys:x.sessions.map(s=>s.key)};
+    });
+    host.append(box);
+  });
+
+  let state={}; let dirty=false;
+  const LS="mot-amsterdam-2027";
+  try{const raw=localStorage.getItem(LS); if(raw) state=JSON.parse(raw)||{};}catch(e){}
+
+  function paint(){
+    let n=0;
+    for(const k in els){const on=!!state[k]; els[k].cb.checked=on; els[k].li.classList.toggle("is-done",on); if(on)n++;}
+    for(const w in weekEls){const W=weekEls[w]; const d=W.keys.filter(k=>state[k]).length; W.count.textContent=`${d}/${W.keys.length}`; W.count.classList.toggle("full",d===W.keys.length);}
+    document.getElementById("doneCount").textContent=n;
+    document.getElementById("doneOf").textContent=`av ${TOTAL} økter fullført`;
+    document.getElementById("bar").style.width=(n/TOTAL*100).toFixed(1)+"%";
+  }
+  paint();
+
+  const statusEl=document.getElementById("status");
+  function setStatus(t){statusEl.textContent=t}
+
+  let ref=null, timer=null, saving=false, again=false;
+  function persist(){
+    try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}
+    if(!ref){return}
+    clearTimeout(timer); timer=setTimeout(save,700);
+  }
+  async function save(){
+    if(saving){again=true;return}
+    saving=true; setStatus("Lagrer …");
+    try{ await ref.set({done:{...state},updated:new Date().toISOString()}); dirty=false; setStatus("Lagret. Avkrysningene følger deg på alle enheter."); }
+    catch(e){
+      if(e&&e.code==="unavailable"){ await new Promise(r=>setTimeout(r,800+Math.random()*800)); try{await ref.set({done:{...state},updated:new Date().toISOString()});dirty=false;setStatus("Lagret.");}catch(e2){setStatus("Kunne ikke lagre nå. Avkrysningene ligger i denne nettleseren til neste gang.")} }
+      else if(e&&e.code==="invalid_argument"){ setStatus("Du kan se planen, men bare eieren kan krysse av."); }
+      else setStatus("Kunne ikke lagre nå. Avkrysningene ligger i denne nettleseren til neste gang.");
+    }
+    saving=false;
+    if(again){again=false;save()}
+  }
+
+  setStatus("Avkrysninger lagres i denne nettleseren.");
+  (async()=>{
+    if(!window.claude||!window.claude.use) return;
+    let db=null; try{db=await window.claude.use("db")}catch(e){}
+    if(!db){setStatus("Avkrysninger lagres bare i denne nettleseren.");return}
+    try{
+      const user=await window.claude.use("user");
+      if(user&&!user.isOwner()){ for(const k in els) els[k].cb.disabled=true; }
+    }catch(e){}
+    ref=db.doc("progress/checks");
+    setStatus("Henter avkrysninger …");
+    const t=setTimeout(()=>setStatus("Får ikke kontakt med lagringen akkurat nå. Avkrysninger lagres i nettleseren så lenge."),10000);
+    let first=true;
+    ref.onSnapshot(snap=>{
+      if(!snap.metadata.fromCache) clearTimeout(t);
+      if(snap.exists){
+        const remote=(snap.data()||{}).done||{};
+        if(!dirty){ state={...remote}; try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){} paint(); }
+      } else if(first && Object.keys(state).length){ dirty=true; persist(); }
+      if(first&&!snap.metadata.fromCache){ first=false; setStatus("Avkrysningene lagres og følger deg på alle enheter."); }
+    },err=>{clearTimeout(t); setStatus("Lagringen er ikke tilgjengelig nå. Avkrysninger lagres i denne nettleseren.")});
+  })();
+})();
+</script>
+
+</body>
+</html>
