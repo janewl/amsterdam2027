@@ -1,6 +1,6 @@
 import {weeks,PHASES,START,RACE,TOTAL,DAYNAME,DAYFULL,currentWeek,fmtRange,dateOf,sameDay} from "./plan.js";
 import {EX,exName,initExerciseDialog} from "./exercises.js";
-import {initStore,onStoreState,state,store,signIn,signOut} from "./store.js";
+import {initStore,onStoreState,state,store,signIn,signOut,hasGoogleButton,renderGoogleButton} from "./store.js";
 import {initSession,startSession,openSession,getActive,toast} from "./session.js";
 
 const $=id=>document.getElementById(id);
@@ -113,10 +113,14 @@ function renderAccount(st){
   else msg.textContent="Ikke innlogget. Fremgangen lagres bare i denne nettleseren.";
   a.append(msg);
   if(st.configured&&st.ready){
-    const b=document.createElement("button"); b.type="button"; b.className="btn small"+(st.user?" ghost":" primary");
-    b.textContent=st.user?"Logg ut":"Logg inn med Google";
-    b.addEventListener("click",()=>st.user?signOut():signIn());
-    a.append(b);
+    if(!st.user&&hasGoogleButton){
+      const g=document.createElement("div"); g.className="gbtn"; a.append(g); renderGoogleButton(g);
+    } else {
+      const b=document.createElement("button"); b.type="button"; b.className="btn small"+(st.user?" ghost":" primary");
+      b.textContent=st.user?"Logg ut":"Logg inn med Google";
+      b.addEventListener("click",()=>st.user?signOut():signIn());
+      a.append(b);
+    }
   }
   const e=$("acct-err"); e.hidden=!st.error; e.textContent=st.error||"";
 }

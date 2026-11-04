@@ -1,6 +1,8 @@
 // Lagring: Firestore når du er logget inn med Google, ellers denne nettleseren.
 // Alle stier er relative til brukeren, f.eks. "state/progress" eller "sessions/s123".
-import {firebaseConfig, allowedEmail} from "../firebase-config.js";
+import * as CFG from "../firebase-config.js";
+const {firebaseConfig, allowedEmail}=CFG;
+const googleClientId=CFG.googleClientId||"";
 
 const SDK="https://www.gstatic.com/firebasejs/10.12.2/";
 const LS="ma27:";
@@ -125,4 +127,44 @@ export async function signIn(){
     emit();
   }
 }
-export async function signOut(){ if(auth) await A.signOut(auth); }
+export async function signOut(){
+  try{ window.google&&google.accounts&&google.accounts.id.disableAutoSelect(); }catch(e){}
+  if(auth) await A.signOut(auth);
+}
+
+/* Safari (iPhone) blocks the Firebase popup/redirect flow because firebaseapp.com is a different site
+   than janewl.github.io. Google's own sign-in button talks to accounts.google.com directly and hands us
+   an ID token, which we exchange for a Firebase session. Used whenever a client ID is configured. */
+export const hasGoogleButton=!!googleClientId;
+let gisReady=null;
+function loadGis(){
+  if(gisReady) return gisReady;
+  gisReady=new Promise((res,rej)=>{
+    const s=document.createElement("script"); s.src="https://accounts.google.com/gsi/client"; s.async=true;
+    s.onload=()=>{
+      google.accounts.id.initialize({
+        client_id:googleClientId,
+        callback:async r=>{
+          try{ await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(r.credential)); }
+          catch(e){ console.error(e); state.error="Innloggingen feilet ("+(e.code||"ukjent feil")+")."; emit(); }
+        },
+        auto_select:false, cancel_on_tap_outside:true
+      });
+      res();
+    };
+    s.onerror=()=>{gisReady=null; rej(new Error("gsi"));};
+    document.head.append(s);
+  });
+  return gisReady;
+}
+export async function renderGoogleButton(el){
+  try{
+    await loadGis(); el.textContent="";
+    const dark=matchMedia("(prefers-color-scheme: dark)").matches;
+    google.accounts.id.renderButton(el,{type:"standard",theme:dark?"filled_black":"outline",size:"large",shape:"pill",text:"signin_with",locale:"no"});
+  }catch(e){
+    // Fall back to the Firebase popup if Google's script can't load.
+    el.textContent=""; const b=document.createElement("button"); b.type="button"; b.className="btn small primary"; b.textContent="Logg inn med Google";
+    b.addEventListener("click",signIn); el.append(b);
+  }
+}
