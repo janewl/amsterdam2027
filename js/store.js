@@ -11,7 +11,7 @@ export function onStoreState(f){listeners.add(f); f(state); return ()=>listeners
 function fail(e){
   console.error(e);
   state.error=e&&e.code==="permission-denied"
-    ?"Databasen avviste lagringen. Sjekk at sikkerhetsreglene har riktig e-postadresse."
+    ?`Databasen avviste ${state.user?state.user.email:"kontoen"}. Logg inn med Google-kontoen som står i sikkerhetsreglene, eller sjekk at e-postadressen i reglene er skrevet riktig.`
     :"Noe gikk galt med lagringen. Det du har logget ligger lagret på enheten og sendes når forbindelsen er tilbake.";
   emit();
 }
