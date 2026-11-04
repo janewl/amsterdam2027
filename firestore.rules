@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Bare du kan lese og skrive, og bare i din egen mappe.
+    // Bytt ut e-postadressen med Google-kontoen du logger inn med.
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.email == "DIN-EPOST@gmail.com"
+        && request.auth.token.email_verified == true;
+    }
+  }
+}

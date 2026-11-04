@@ -11,16 +11,16 @@
 /* Layout: one reading column; header with race facts, then the week-by-week log, then reference sections. */
 :root{
   --bg:#f3f6f8; --surface:#ffffff; --ink:#13202a; --muted:#566874; --line:#d6dfe5;
-  --accent:#d9480f; --canal:#1d5c86; --iron:#5f4a94; --done:#2b7a4b; --soft:#e8eef2;
+  --accent:#d9480f; --canal:#1d5c86; --iron:#5f4a94; --done:#2b7a4b; --soft:#e8eef2; --on-accent:#ffffff;
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e161c; --surface:#15212a; --ink:#e4ebf0; --muted:#94a6b2; --line:#26353f;
-  --accent:#ff8640; --canal:#72b4e2; --iron:#b39ee8; --done:#5fcf8f; --soft:#1c2a34; color-scheme:dark}}
+  --accent:#ff8640; --canal:#72b4e2; --iron:#b39ee8; --done:#5fcf8f; --soft:#1c2a34; --on-accent:#1a0e06; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e161c; --surface:#15212a; --ink:#e4ebf0; --muted:#94a6b2; --line:#26353f;
-  --accent:#ff8640; --canal:#72b4e2; --iron:#b39ee8; --done:#5fcf8f; --soft:#1c2a34; color-scheme:dark}
+  --accent:#ff8640; --canal:#72b4e2; --iron:#b39ee8; --done:#5fcf8f; --soft:#1c2a34; --on-accent:#1a0e06; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
 .wrap{max-width:860px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
@@ -110,6 +110,62 @@ svg .lim-n{stroke:var(--ink)} svg .lim-f{stroke:var(--muted);opacity:.55}
 svg .hd{fill:var(--ink)} svg .gnd{stroke:var(--line)} svg .prop{fill:var(--surface);stroke:var(--muted)}
 svg .plate{fill:var(--iron);fill-opacity:.18;stroke:var(--iron)} svg .wire{stroke:var(--iron);stroke-dasharray:3 3}
 svg .foc{fill:none;stroke:var(--accent)}
+
+.btn{font:inherit;font-weight:600;font-size:.95rem;border-radius:99px;padding:8px 16px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:40px}
+.btn.small{font-size:.85rem;padding:5px 12px;min-height:34px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.chk:focus-visible,.howbtn:focus-visible,.xname:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.acct{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:.92rem;color:var(--muted)}
+.acct-err{color:var(--accent);font-size:.92rem;font-weight:600}
+#today:empty{display:none}
+.banner{background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.startbtn{justify-self:start;margin-top:4px}
+.prog{border-top:1px solid var(--line);padding-top:12px}
+body.okt-open{overflow:hidden}
+.okt{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;overscroll-behavior:contain}
+.okt-in{max-width:760px;margin:0 auto;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:14px}
+.okt-head{position:sticky;top:0;z-index:2;background:var(--bg);padding:calc(12px + env(safe-area-inset-top,0px)) 0 10px;border-bottom:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:10px;align-items:end;justify-content:space-between}
+.okt-tt{display:grid;gap:2px;min-width:0}
+.okt-tt h2{font-size:1.7rem}
+.okt-clock{color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+.okt-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.okt-hint{color:var(--muted);font-size:.9rem}
+.okt-list{display:grid;gap:12px}
+.okt-confirm{background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px;display:grid;gap:10px}
+.xcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px;min-width:0}
+.xcard.done{border-color:var(--done);box-shadow:inset 4px 0 0 var(--done)}
+.xhead{display:flex;gap:6px 12px;align-items:baseline;flex-wrap:wrap}
+.xname{font-family:var(--display);font-size:1.45rem;font-weight:700;background:none;border:0;color:var(--ink);padding:0;cursor:pointer;text-align:left;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.rx{font-variant-numeric:tabular-nums;font-weight:600;color:var(--iron)}
+.howbtn{margin-left:auto;font:inherit;font-size:.85rem;color:var(--iron);background:var(--soft);border:1px solid transparent;border-radius:99px;padding:3px 12px;cursor:pointer}
+.last{font-size:.92rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.sug{font-size:.95rem;border-left:3px solid var(--line);padding-left:10px}
+.sug.up{border-left-color:var(--accent)}
+.note{display:grid;gap:4px}
+.notelbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.note textarea{width:100%;font:inherit;font-size:16px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--bg);color:var(--ink);min-height:2.75em;resize:vertical}
+.sets{display:grid;gap:6px}
+.colhead,.setrow{display:grid;grid-template-columns:2.2em minmax(0,1fr) minmax(0,1fr) 52px;gap:8px;align-items:center}
+.colhead.one,.setrow.one{grid-template-columns:2.2em minmax(0,1fr) 52px}
+.colhead{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+.setno{font-family:var(--display);font-weight:700;font-size:1.1rem;color:var(--muted);text-align:center}
+.setrow input,.setrow select{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;min-width:0}
+.setrow input:focus,.setrow select:focus,.note textarea:focus{outline:2px solid var(--iron);outline-offset:0;border-color:transparent}
+.chk{width:52px;height:44px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--muted);font-size:1.3rem;font-weight:700;cursor:pointer}
+.chk[aria-pressed="true"]{background:var(--done);border-color:var(--done);color:var(--on-accent)}
+.setrow.is-done input,.setrow.is-done select{color:var(--muted)}
+.setctl{display:flex;flex-wrap:wrap;gap:8px}
+.timer{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);color:var(--bg);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:center}
+.timer.over{background:var(--done);color:var(--on-accent)}
+.timer-txt{display:flex;align-items:baseline;gap:10px;min-width:0}
+.timer-txt b{font-family:var(--display);font-size:2.1rem;line-height:1;font-variant-numeric:tabular-nums}
+.timer-txt span{font-size:.9rem;opacity:.85}
+.timer-btns{display:flex;gap:8px}
+.timer button{font:inherit;font-weight:600;border:1px solid currentColor;background:transparent;color:inherit;border-radius:99px;padding:6px 14px;cursor:pointer;min-height:38px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:600;width:max-content;max-width:calc(100vw - 32px)}
+@media (max-width:480px){.okt-head{align-items:start}.okt-actions{width:100%}.okt-actions #okt-finish{margin-left:auto}}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 @media (max-width:480px){.s{grid-template-columns:auto 1fr}.day{grid-column:2}.s .txt{grid-column:2}}
 </style>
@@ -120,14 +176,16 @@ svg .foc{fill:none;stroke:var(--accent)}
   <header>
     <div class="eyebrow">Halvmaraton · 21,0975 km</div>
     <h1>Mot Amsterdam 2027</h1>
-    <p class="lede">50 uker fra comeback til målgang. Løping og styrke i samme plan, med rolig oppbygging og en lett uke hver fjerde uke. Kryss av økter etter hvert som du gjør dem.</p>
+    <p class="lede">50 uker fra comeback til målgang. Løping og styrke i samme plan, med rolig oppbygging og en lett uke hver fjerde uke. Kryss av økter etter hvert som du gjør dem, og start styrkeøktene her for å logge vekter.</p>
     <div class="facts">
       <div class="fact"><b id="daysLeft">–</b><span>dager til løpet (17. okt)</span></div>
       <div class="fact"><b>2:00:00</b><span>måltid · 5:41 min/km</span></div>
       <div class="fact"><b id="doneCount">0</b><span id="doneOf">av – økter fullført</span></div>
     </div>
     <div class="bar" aria-hidden="true"><i id="bar"></i></div>
-    <p class="status" id="status">Laster lagrede avkrysninger …</p>
+    <div class="acct" id="acct"><span>Laster …</span></div>
+    <p class="acct-err" id="acct-err" role="alert" hidden></p>
+    <div id="today"></div>
     <nav aria-label="Seksjoner">
       <a href="#plan">Ukeplan</a><a href="#styrke">Styrkeprogram</a><a href="#oppvarming">Oppvarming og tøying</a><a href="#endringer">Når dagen ikke går som planlagt</a>
     </nav>
@@ -164,7 +222,7 @@ svg .foc{fill:none;stroke:var(--accent)}
         <thead><tr><th>Øvelse</th><th>Sett × reps</th><th>RIR</th><th>Kommentar</th></tr></thead>
         <tbody>
           <tr><td>Benkpress eller manualpress</td><td class="n">4 × 6–8</td><td class="n">2</td><td></td></tr>
-          <tr><td>Pull-ups eller nedtrekk</td><td class="n">4 × 6–10</td><td class="n">2</td><td></td></tr>
+          <tr><td>Pull-ups med strikk eller nedtrekk</td><td class="n">4 × 6–10</td><td class="n">2</td><td></td></tr>
           <tr><td>Sittende roing med kabel</td><td class="n">3 × 10–12</td><td class="n">2</td><td>Øvre rygg</td></tr>
           <tr><td>Skulderpress med manualer</td><td class="n">3 × 8–10</td><td class="n">2</td><td></td></tr>
           <tr><td>Face pulls</td><td class="n">3 × 15</td><td class="n">1</td><td>Mot spenningshodepine</td></tr>
@@ -353,543 +411,31 @@ svg .foc{fill:none;stroke:var(--accent)}
       <div><h4>Juster kroppen underveis</h4><ul class="cues" id="exd-cues"></ul></div>
     </div>
     <div><h4>Vanlige feil</h4><ul class="err" id="exd-err"></ul></div>
+    <div id="exd-prog" class="prog" hidden><h4 id="exd-prog-title"></h4><ul class="cues" id="exd-prog-list"></ul></div>
   </div>
 </dialog>
 
-<script>
-(function(){
-  const START = new Date(2026,10,2); // mandag 2. nov 2026 (uke 0)
-  const RACE = new Date(2027,9,17);
-  const LIGHT = new Set([4,8,12,16,20,24,28,32,36,40,44]);
-  const PHASES = [
-    {n:1,name:"Gjenoppstart",from:0,to:8,desc:"Alt rolig, målt i minutter. Mål: 40–60 min sammenhengende uten å bli støl dagen etter."},
-    {n:2,name:"Grunnlag",from:9,to:24,desc:"Tre turer i uka. Langturen øker fra 8 til 14 km. Stigningsløp fra februar, fartlek fra mars."},
-    {n:3,name:"Bygging",from:25,to:40,desc:"Én kvalitetsøkt i uka. Langtur opp mot 18 km. Styrke ned til to økter."},
-    {n:4,name:"Spesifikk forberedelse",from:41,to:47,desc:"Bli komfortabel i 5:40-tempo. Lengste tur 20 km og generalprøve."},
-    {n:5,name:"Nedtrapping",from:48,to:49,desc:"Mindre volum, litt fart. Ingen tunge løft."}
-  ];
-  // [tirsdag, torsdag (løp), fredag, lørdag]. "K|" = kvalitetsøkt.
-  const RUN = {
-    0:["30 min rolig","","","20–25 min rolig hvis stølheten er borte. Ellers 30–45 min gåtur."],
-    1:["25 min rolig. Gå-pauser er greit.","","","30 min rolig"],
-    2:["30 min rolig","","","35 min rolig"],
-    3:["30 min rolig","","","40 min rolig"],
-    4:["25 min rolig","","","30 min rolig"],
-    5:["30 min rolig","","25 min rolig","45 min rolig"],
-    6:["35 min rolig","","25 min rolig","50 min rolig"],
-    7:["35 min rolig","","30 min rolig","55–60 min rolig"],
-    8:["30 min rolig","","25 min rolig","40 min rolig"],
-    9:["5 km rolig","","4 km rolig","8 km rolig"],
-    10:["5 km rolig","","4 km rolig","9 km rolig"],
-    11:["6 km rolig","","4 km rolig","10 km rolig"],
-    12:["5 km rolig","","3 km rolig","7 km rolig"],
-    13:["6 km rolig + 4 stigningsløp à 15–20 sek","","5 km rolig","10 km rolig"],
-    14:["6 km rolig + 5 stigningsløp","","5 km rolig","11 km rolig"],
-    15:["6 km rolig + 6 stigningsløp","","5 km rolig","12 km rolig"],
-    16:["5 km rolig + 4 stigningsløp","","4 km rolig","8 km rolig"],
-    17:["K|Fartlek: 6 × 2 min litt raskt, 2 min rolig mellom (ca. 7 km)","","5 km rolig","12 km rolig"],
-    18:["K|Fartlek: 7 × 2 min litt raskt, 2 min rolig mellom","","6 km rolig","13 km rolig"],
-    19:["K|Fartlek: 8 × 2 min litt raskt, 2 min rolig mellom","","6 km rolig","13 km rolig"],
-    20:["6 km rolig + 4 stigningsløp","","4 km rolig","10 km rolig"],
-    21:["K|Fartlek: 5 × 3 min litt raskt, 2 min rolig mellom","","6 km rolig","14 km rolig"],
-    22:["K|Fartlek: 6 × 3 min litt raskt, 2 min rolig mellom","","6 km rolig","14 km rolig"],
-    23:["K|Fartlek: 4 × 4 min litt raskt, 2 min rolig mellom","","6 km rolig","14 km rolig"],
-    24:["6 km rolig + 4 stigningsløp","","4 km rolig","10 km lett. Milepæl: 10 km i komfortabelt tempo."],
-    25:["K|Terskel: 2 × 10 min komfortabelt hardt, 2 min pause","","6 km rolig","14 km rolig"],
-    26:["K|Intervaller: 4 × 1 km i 5:20–5:30, 2 min pause","","6 km rolig","15 km rolig"],
-    27:["K|Terskel: 3 × 8 min, 2 min pause","","7 km rolig","15 km rolig"],
-    28:["7 km rolig + 4 stigningsløp","","5 km rolig","11 km rolig"],
-    29:["K|Intervaller: 5 × 1 km i 5:20–5:30, 2 min pause","5 km rolig","6 km rolig","16 km rolig"],
-    30:["K|Terskel: 3 × 10 min, 2 min pause","5 km rolig","6 km rolig","16 km rolig"],
-    31:["K|Intervaller: 6 × 1 km i 5:20–5:30, 2 min pause","5 km rolig","7 km rolig","16 km rolig"],
-    32:["7 km rolig + 4 stigningsløp","","5 km rolig","12 km rolig"],
-    33:["K|Terskel: 2 × 15 min, 3 min pause","6 km rolig","7 km rolig","16 km rolig"],
-    34:["K|Intervaller: 6 × 1 km i 5:20–5:30, 2 min pause","6 km rolig","7 km rolig","17 km rolig"],
-    35:["K|Terskel: 3 × 10 min, 2 min pause","6 km rolig","7 km rolig","17 km rolig"],
-    36:["8 km rolig + 4 stigningsløp","","5 km rolig","12 km rolig"],
-    37:["K|Intervaller: 4 × 1,5 km i 5:25–5:30, 2 min pause","6 km rolig","7 km rolig","17 km rolig"],
-    38:["K|Terskel: 3 × 12 min, 2 min pause","6 km rolig","7 km rolig","18 km rolig"],
-    39:["K|Intervaller: 6 × 1 km i 5:20–5:30, 2 min pause","6 km rolig","7 km rolig","18 km rolig"],
-    40:["8 km rolig + 4 stigningsløp","","5 km rolig","13 km rolig"],
-    41:["K|Løpstempo: 2 × 3 km i 5:35–5:40, 3 min rolig jogg mellom","6 km rolig","7 km rolig","18 km, de siste 4 km i løpstempo"],
-    42:["K|Løpstempo: 3 × 3 km i 5:35–5:40, 3 min rolig jogg mellom","6 km rolig","7 km rolig","19 km rolig"],
-    43:["K|Terskel: 3 × 10 min, 2 min pause","6 km rolig","7 km rolig","20 km rolig. Lengste tur før løpet."],
-    44:["8 km rolig + 4 stigningsløp","","5 km rolig","14 km rolig"],
-    45:["K|Løpstempo: 3 × 3 km i 5:35–5:40","6 km rolig","6 km rolig","Generalprøve: 16 km, de siste 8 km i løpstempo"],
-    46:["K|Løpstempo: 2 × 3 km i 5:35–5:40","6 km rolig","7 km rolig","19 km, de siste 5 km i løpstempo"],
-    47:["K|Løpstempo: 3 × 2 km i 5:35–5:40","6 km rolig","7 km rolig","16 km rolig"],
-    48:["K|Løpstempo: 2 × 2 km, ellers rolig (ca. 7 km)","5 km rolig","5 km rolig","12 km rolig"],
-    49:["K|6 km med 3 × 1 km i løpstempo","4 km rolig + 3 stigningsløp","","Shakeout: 3 km veldig rolig + 3 stigningsløp"]
-  };
 
-  function phaseOf(w){return PHASES.find(p=>w>=p.from&&w<=p.to).n}
-
-  function gym(w){
-    const p=phaseOf(w), light=LIGHT.has(w), out=[];
-    const lt=light?" Lett uke: kutt ett sett per øvelse.":"";
-    if(w===0){
-      out.push({d:"ons",k:"gym",title:"Overkropp og kjerne",info:"Beina er støle, så ta overkroppen i dag. 3 sett per øvelse, RIR 3.",wu:"wu-over"});
-      out.push({d:"tor",k:"walk",title:"Gåtur",info:"30 min rask gange. Hjelper mot stølheten.",wu:"wu-rolig"});
-      out.push({d:"fre",k:"gym",title:"Bein, lett",info:"Bare hvis stølheten er nesten borte: 2 sett knebøy, bulgarske utfall og tåhev, RIR 3–4. Ellers mobilitet og kjerne.",wu:"wu-bein"});
-    } else if(p===1){
-      out.push({d:"man",k:"gym",title:"Bein (redusert)",info:"3 sett knebøy, ett sett mindre på hver beinøvelse, RIR 3."+lt,wu:"wu-bein"});
-      out.push({d:"ons",k:"gym",title:"Overkropp og kjerne",info:"Fullt program."+lt,wu:"wu-over"});
-      out.push({d:"tor",k:"gym",title:"Helkropp lett",info:"2 sett per øvelse."+lt,wu:"wu-bein"});
-    } else if(p===2){
-      out.push({d:"man",k:"gym",title:"Bein",info:(w>=17?"Start med hopp: 3 × 5 bokshopp, 3 × 6 hopp på ett bein. Deretter fullt program.":"Fullt program.")+lt,wu:"wu-bein"});
-      out.push({d:"ons",k:"gym",title:"Overkropp og kjerne",info:"Fullt program."+lt,wu:"wu-over"});
-      out.push({d:"tor",k:"gym",title:"Helkropp lett",info:"Fullt program, RIR 3."+lt,wu:"wu-bein"});
-    } else if(p===3){
-      out.push({d:"man",k:"gym",title:"Bein",info:"3 sett på alle øvelser. Behold hopp."+lt,wu:"wu-bein"});
-      out.push({d:"ons",k:"gym",title:"Overkropp + lette bein",info:"Overkropp som vanlig, pluss step-ups, tåhev og Copenhagen-planke."+lt,wu:"wu-over"});
-    } else if(p===4){
-      out.push({d:"man",k:"gym",title:"Bein, vedlikehold",info:"Samme vekter, 2–3 sett, RIR 3."+lt,wu:"wu-bein"});
-      out.push({d:"ons",k:"gym",title:"Overkropp + lette bein",info:"2–3 sett, RIR 3."+lt,wu:"wu-over"});
-    } else if(w===48){
-      out.push({d:"man",k:"gym",title:"Bein, lett",info:"2 sett per øvelse, RIR 3–4. Siste beinøkt med vekt.",wu:"wu-bein"});
-      out.push({d:"ons",k:"gym",title:"Mobilitet og kjerne",info:"Lett kjerne, band pull-aparts og noen sett tåhev med kroppsvekt.",wu:"wu-over"});
-    } else {
-      out.push({d:"man",k:"gym",title:"Mobilitet og kjerne",info:"Lette sett tåhev og utfall med kroppsvekt. Ingen tunge løft.",wu:"wu-bein"});
-    }
-    return out;
-  }
-
-  const MON=["squat","rdl","bulg","hipthrust","calf","calfsit","cph"];
-  const WED=["bench","pullup","row","ohp","facepull","pullapart","pallof","deadbug"];
-  const THU=["deadlift","stepup","dbrow","pushup","slrdl","sideplank","farmer"];
-  function exFor(w,s){
-    if(s.k!=="gym") return [];
-    const p=phaseOf(w);
-    if(w===0) return s.d==="ons"?WED:s.d==="fre"?["squat","bulg","calf"]:[];
-    if(w===48) return s.d==="man"?MON:["deadbug","pullapart","calf"];
-    if(w===49) return ["calf","bulg","deadbug"];
-    if(s.d==="man") return ((p===2&&w>=17)||p===3?["boxjump","hop"]:[]).concat(MON);
-    if(s.d==="ons") return p>=3?WED.concat(["stepup","calf","cph"]):WED;
-    if(s.d==="tor") return THU;
-    return [];
-  }
-
-  function runSession(d,txt,isLong){
-    if(!txt) return null;
-    const q=txt.startsWith("K|"); const t=q?txt.slice(2):txt;
-    return {d,k:isLong?"long":(q?"q":"run"),title:isLong?"Langtur":(q?"Kvalitetsøkt":"Rolig tur"),info:t,wu:q?"wu-kval":"wu-rolig"};
-  }
-
-  const ORDER={man:0,tir:1,ons:2,tor:3,fre:4,"lør":5,"søn":6};
-  const DAYNAME={man:"Man",tir:"Tir",ons:"Ons",tor:"Tor",fre:"Fre","lør":"Lør","søn":"Søn"};
-  const MONTHS=["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"];
-
-  const weeks=[];
-  for(let w=0;w<=49;w++){
-    const r=RUN[w]; const s=[...gym(w)];
-    [runSession("tir",r[0]),runSession("tor",r[1]),runSession("fre",r[2]),runSession("lør",r[3],w!==49&&w!==0)].forEach(x=>x&&s.push(x));
-    if(w===49){
-      const sat=s.find(x=>x.d==="lør"); if(sat){sat.k="run";sat.title="Rolig tur";}
-      s.push({d:"søn",k:"race",title:"Amsterdam halvmaraton",info:"Start rolig: første 5 km i ca. 5:45, deretter 5:40. Øk bare hvis du føler deg sterk etter 15 km.",wu:"wu-kval"});
-    }
-    s.sort((a,b)=>ORDER[a.d]-ORDER[b.d]);
-    s.forEach(x=>{x.key="w"+w+"-"+x.d+"-"+x.k; x.ex=exFor(w,x);});
-    const mon=new Date(START); mon.setDate(START.getDate()+w*7);
-    const sun=new Date(mon); sun.setDate(mon.getDate()+6);
-    weeks.push({w,sessions:s,mon,sun,light:LIGHT.has(w)});
-  }
-  const TOTAL=weeks.reduce((a,x)=>a+x.sessions.length,0);
-
-  function fmt(a,b){
-    return a.getMonth()===b.getMonth()?`${a.getDate()}.–${b.getDate()}. ${MONTHS[b.getMonth()]}`:`${a.getDate()}. ${MONTHS[a.getMonth()]} – ${b.getDate()}. ${MONTHS[b.getMonth()]}`;
-  }
-
-  const today=new Date(); today.setHours(0,0,0,0);
-  let currentWeek=0;
-  weeks.forEach(x=>{if(today>=x.mon&&today<=new Date(x.sun.getTime()+86399999)) currentWeek=x.w;});
-  if(today>weeks[weeks.length-1].sun) currentWeek=49;
-  const days=Math.round((RACE-today)/86400000);
-  document.getElementById("daysLeft").textContent=days>=0?days:"0";
-
-  const TAGS={walk:["run","Aktiv hvile"],gym:["gym","Styrke"],run:["run","Løp"],q:["q","Kvalitet"],long:["long","Langtur"],race:["race","Løpsdag"]};
-  const host=document.getElementById("phases");
-  const els={}; const weekEls={};
-  PHASES.forEach(p=>{
-    const box=document.createElement("div"); box.className="phase";
-    const head=document.createElement("div"); head.className="phase-head";
-    const h=document.createElement("h3"); h.textContent=`Fase ${p.n} · ${p.name}`;
-    const d=document.createElement("p"); d.textContent=`Uke ${p.from}–${p.to}. ${p.desc}`;
-    head.append(h,d); box.append(head);
-    weeks.filter(x=>x.w>=p.from&&x.w<=p.to).forEach(x=>{
-      const det=document.createElement("details"); det.className="week"+(x.w===currentWeek?" now":"");
-      if(x.w===currentWeek) det.open=true;
-      const sum=document.createElement("summary");
-      sum.innerHTML=`<span class="wk">Uke ${x.w}</span><span class="dates">${fmt(x.mon,x.sun)}</span>`+
-        (x.light?`<span class="pill light">Lett uke</span>`:"")+(x.w===currentWeek?`<span class="pill now">${today<START?"Første uke":"Denne uka"}</span>`:"")+
-        `<span class="count" data-count></span>`;
-      det.append(sum);
-      const ul=document.createElement("ul"); ul.className="sessions";
-      x.sessions.forEach(s=>{
-        const li=document.createElement("li"); li.className="s";
-        const id="cb-"+s.key;
-        const cb=document.createElement("input"); cb.type="checkbox"; cb.id=id; cb.dataset.key=s.key;
-        const day=document.createElement("label"); day.className="day"; day.htmlFor=id; day.textContent=DAYNAME[s.d];
-        const txt=document.createElement("div"); txt.className="txt";
-        const t=document.createElement("label"); t.className="ttl"; t.htmlFor=id;
-        const tg=document.createElement("span"); tg.className="tag "+TAGS[s.k][0]; tg.textContent=TAGS[s.k][1];
-        t.append(tg,document.createTextNode(s.title));
-        const info=document.createElement("span"); info.className="info"; info.textContent=s.info;
-        const wu=document.createElement("a"); wu.className="wu"; wu.href="#"+s.wu; wu.textContent="Oppvarming";
-        txt.append(t,info);
-        if(s.ex&&s.ex.length){
-          const ex=document.createElement("div"); ex.className="exs";
-          s.ex.forEach(id=>{const b=document.createElement("button");b.type="button";b.className="exbtn";b.dataset.ex=id;b.textContent=id;ex.append(b);});
-          txt.append(ex);
-        }
-        txt.append(wu);
-        li.append(cb,day,txt); ul.append(li);
-        els[s.key]={cb,li};
-        cb.addEventListener("change",()=>{ if(cb.checked) state[s.key]=true; else delete state[s.key]; dirty=true; paint(); persist(); });
-      });
-      det.append(ul);
-      if(x.w===0){const n=document.createElement("p");n.className="note";n.textContent="Oppstartsuke. Det er normalt å bli støl etter den første turen. Ikke løp igjen før stølheten har gitt seg. Gåing og overkropp er fint i mellomtiden.";det.append(n);}
-      if(x.light){const n=document.createElement("p");n.className="note";n.textContent="Lett uke: kroppen bygger seg opp i hvilen. Ikke legg på ekstra.";det.append(n);}
-      box.append(det); weekEls[x.w]={det,count:sum.querySelector("[data-count]"),keys:x.sessions.map(s=>s.key)};
-    });
-    host.append(box);
-  });
-
-  let state={}; let dirty=false;
-  const LS="mot-amsterdam-2027";
-  try{const raw=localStorage.getItem(LS); if(raw) state=JSON.parse(raw)||{};}catch(e){}
-
-  function paint(){
-    let n=0;
-    for(const k in els){const on=!!state[k]; els[k].cb.checked=on; els[k].li.classList.toggle("is-done",on); if(on)n++;}
-    for(const w in weekEls){const W=weekEls[w]; const d=W.keys.filter(k=>state[k]).length; W.count.textContent=`${d}/${W.keys.length}`; W.count.classList.toggle("full",d===W.keys.length);}
-    document.getElementById("doneCount").textContent=n;
-    document.getElementById("doneOf").textContent=`av ${TOTAL} økter fullført`;
-    document.getElementById("bar").style.width=(n/TOTAL*100).toFixed(1)+"%";
-  }
-  paint();
-
-  const statusEl=document.getElementById("status");
-  function setStatus(t){statusEl.textContent=t}
-
-  let ref=null, timer=null, saving=false, again=false;
-  function persist(){
-    try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}
-    if(!ref){return}
-    clearTimeout(timer); timer=setTimeout(save,700);
-  }
-  async function save(){
-    if(saving){again=true;return}
-    saving=true; setStatus("Lagrer …");
-    try{ await ref.set({done:{...state},updated:new Date().toISOString()}); dirty=false; setStatus("Lagret. Avkrysningene følger deg på alle enheter."); }
-    catch(e){
-      if(e&&e.code==="unavailable"){ await new Promise(r=>setTimeout(r,800+Math.random()*800)); try{await ref.set({done:{...state},updated:new Date().toISOString()});dirty=false;setStatus("Lagret.");}catch(e2){setStatus("Kunne ikke lagre nå. Avkrysningene ligger i denne nettleseren til neste gang.")} }
-      else if(e&&e.code==="invalid_argument"){ setStatus("Du kan se planen, men bare eieren kan krysse av."); }
-      else setStatus("Kunne ikke lagre nå. Avkrysningene ligger i denne nettleseren til neste gang.");
-    }
-    saving=false;
-    if(again){again=false;save()}
-  }
-
-  setStatus("Avkrysninger lagres i denne nettleseren.");
-  (async()=>{
-    if(!window.claude||!window.claude.use) return;
-    let db=null; try{db=await window.claude.use("db")}catch(e){}
-    if(!db){setStatus("Avkrysninger lagres bare i denne nettleseren.");return}
-    try{
-      const user=await window.claude.use("user");
-      if(user&&!user.isOwner()){ for(const k in els) els[k].cb.disabled=true; }
-    }catch(e){}
-    ref=db.doc("progress/checks");
-    setStatus("Henter avkrysninger …");
-    const t=setTimeout(()=>setStatus("Får ikke kontakt med lagringen akkurat nå. Avkrysninger lagres i nettleseren så lenge."),10000);
-    let first=true;
-    ref.onSnapshot(snap=>{
-      if(!snap.metadata.fromCache) clearTimeout(t);
-      if(snap.exists){
-        const remote=(snap.data()||{}).done||{};
-        if(!dirty){ state={...remote}; try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){} paint(); }
-      } else if(first && Object.keys(state).length){ dirty=true; persist(); }
-      if(first&&!snap.metadata.fromCache){ first=false; setStatus("Avkrysningene lagres og følger deg på alle enheter."); }
-    },err=>{clearTimeout(t); setStatus("Lagringen er ikke tilgjengelig nå. Avkrysninger lagres i denne nettleseren.")});
-  })();
-})();
-</script>
-<script>
-(function(){
-  /* Stick-figure poses. Angles in degrees. Limbs: 0 = straight down, 90 = forward (right), 180 = up, -90 = back.
-     Torso t: 0 = upright, 90 = leaning fully forward, -90 = lying with head to the left.
-     nl/fl = near/far leg [thigh, shin, foot]; na/fa = near/far arm [upper, fore, upperScale, foreScale]. */
-  const L={torso:52,neck:17,head:9,thigh:44,shin:42,foot:14,up:30,fore:28}, G=190;
-  const STAND={nl:[0,0,90],fl:[0,0,90]};
-  const EX={
-    squat:{n:"Knebøy",t:"Knebøy (eller beinpress)",sub:"Stang på øvre del av ryggen. Beinpress: samme tips for føtter og knær.",root:"nAnk",
-      A:{r:[118,186],t:5,nl:[0,0,90],fl:[0,0,90],na:[-30,160],fa:[-30,160]},
-      B:{r:[118,186],t:40,nl:[78,-28,90],fl:[78,-28,90],na:[10,200],fa:[10,200]},
-      props:[{k:"plate",at:"sh",dx:-4,dy:-6}],focus:["nHeel","nKnee"],cap:"Oransje: hælene og knærne.",
-      steps:["Stangen ligger på øvre del av ryggen, ikke på nakken. Føttene i skulderbredde, tærne litt utover.","Pust inn, stram magen og sett deg ned mellom hælene.","Gå ned til lårene er minst parallelle med gulvet, eller så dypt du klarer med nøytral rygg.","Press opp igjen og pust ut på vei opp."],
-      cues:["Legg press gjennom hælene og midtfoten når du presser vekten opp.","Skyv knærne ut i samme retning som tærne.","Hold brystet oppe og blikket et par meter foran deg på gulvet.","Stram magen før hver rep, som om noen skal dytte deg i magen."],
-      err:["Knærne faller innover.","Hælene løfter seg fra gulvet.","Hoftene skyter opp før skuldrene på vei opp."]},
-    rdl:{n:"Rumensk markløft",t:"Rumensk markløft",sub:"Stang eller manualer. Treffer baksiden av lår og setet.",root:"nAnk",
-      A:{r:[118,186],t:0,...STAND,na:[0,0],fa:[0,0]},
-      B:{r:[118,186],t:65,nl:[35,-8,90],fl:[35,-8,90],na:[-15,-15],fa:[-15,-15]},
-      props:[{k:"plate",at:"nHand",dx:3,dy:4}],focus:["hip"],cap:"Oransje: hoftene skyves bakover.",
-      steps:["Stå med stangen i hendene, føttene i hoftebredde.","Lås knærne i en myk bøy.","Skyv hoftene bakover og la stangen gli ned langs lårene til du kjenner strekk bak på lårene, omtrent midt på leggen.","Skyv hoftene fram for å reise deg."],
-      cues:["Tenk at du skal lukke en bildør med rumpa.","Hold stangen helt inntil beina hele veien.","Skuldrene ned og bak, som om du klemmer en appelsin i hver armhule.","Ryggen holder samme form hele veien, og nakken følger ryggen."],
-      err:["Runder ryggen for å komme lenger ned.","Bøyer knærne for mye, så det blir en knebøy.","Stangen glir bort fra beina."]},
-    bulg:{n:"Bulgarske utfall",t:"Bulgarske utfall",sub:"Bakre fot på en benk. Manualer i hendene.",root:"nAnk",
-      A:{r:[150,186],t:8,nl:[8,-4,90],fl:[-22,-115,-80],na:[0,0],fa:[0,0]},
-      B:{r:[150,186],t:16,nl:[72,-16,90],fl:[-2,-100,-80],na:[0,0],fa:[0,0]},
-      props:[{k:"rect",x:20,y:116,w:62,h:10},{k:"rect",x:28,y:126,w:8,h:64},{k:"rect",x:66,y:126,w:8,h:64},{k:"db",at:"nHand"}],focus:["nHeel","nKnee"],cap:"Oransje: fremre hæl og kne.",
-      steps:["Stå med ryggen mot en benk og legg vristen på benken bak deg.","Sett fremre fot så langt fram at du kan bøye kneet uten at hælen løfter seg.","Senk deg rett ned til bakre kne nesten treffer gulvet.","Press deg opp gjennom fremre fot."],
-      cues:["Press gjennom hele fremre fot, med vekten på hælen.","Hold fremre kne i linje med andre og tredje tå.","Len overkroppen litt fram for mer sete, eller hold den rett for mer forside lår.","Bakre bein er bare støtte. Nesten all vekten skal være på fremre bein."],
-      err:["Fremre kne faller innover.","Fremre hæl løfter seg.","For kort avstand til benken."]},
-    hipthrust:{n:"Hip thrust",t:"Hip thrust",sub:"Øvre del av ryggen mot en benk, stang over hoftene med pute.",root:"nAnk",
-      A:{r:[172,186],t:-60,nl:[130,10,90],fl:[130,10,90],na:[50,70],fa:[50,70]},
-      B:{r:[172,186],t:-90,nl:[90,0,90],fl:[90,0,90],na:[80,100],fa:[80,100]},
-      props:[{k:"rect",x:30,y:150,w:52,h:10},{k:"rect",x:38,y:160,w:8,h:30},{k:"rect",x:66,y:160,w:8,h:30},{k:"plate",at:"hip",dx:0,dy:-14}],focus:["hip","nHeel"],cap:"Oransje: hoftene og hælene.",
-      steps:["Sitt med nedre kant av skulderbladene mot en benk og stangen over hoftene.","Sett føttene i hoftebredde, så leggene er loddrette i toppen.","Press hoftene opp til kroppen og lårene er i en rett linje.","Hold et sekund i toppen og senk kontrollert."],
-      cues:["Press gjennom hælene.","Hak inn haka og se framover, ikke i taket.","Klem setet hardt i toppen.","Hold ribbeina nede. Ikke svai i korsryggen for å komme høyere."],
-      err:["Svai i korsryggen i toppen.","Føttene for langt fram (kjennes bak på lårene) eller for nær (kjennes foran)."]},
-    calf:{n:"Tåhev, strake knær",t:"Tåhev, strake knær",sub:"På kanten av en trapp eller et step. Ett bein når to blir lett.",root:"nToe",
-      A:{r:[150,170],t:0,nl:[0,0,115],fl:[0,0,115],na:[0,0],fa:[0,0]},
-      B:{r:[150,170],t:0,nl:[0,0,40],fl:[0,0,40],na:[0,0],fa:[0,0]},
-      props:[{k:"rect",x:142,y:172,w:70,h:18}],focus:["nToe","nHeel"],cap:"Oransje: stortåa og hælen.",
-      steps:["Stå med fotballene på kanten av en trapp eller et step. Hold deg i noe for balanse.","Senk hælene rolig under kanten på 2–3 sekunder.","Press deg helt opp på tærne og hold i ett sekund.","Gjør ett bein om gangen når to bein blir lett."],
-      cues:["Press gjennom stortåa og andre tå. Ikke rull ut mot lilletåa.","Knærne strake, men ikke låst bakover.","Rolig ned, raskt opp.","Ta hele bevegelsen, helt ned og helt opp."],
-      err:["Spretter i bunnen.","Tar bare halve bevegelsen."]},
-    calfsit:{n:"Tåhev, sittende",t:"Tåhev, bøyde knær (sittende)",sub:"Sitt med vekt på lårene. Fotballene på en skive eller et step.",root:"nToe",
-      A:{r:[150,180],t:5,nl:[90,0,105],fl:[90,0,105],na:[45,90],fa:[45,90]},
-      B:{r:[150,180],t:5,nl:[90,0,45],fl:[90,0,45],na:[45,90],fa:[45,90]},
-      props:[{k:"rect",x:60,y:133,w:66,h:10},{k:"rect",x:70,y:143,w:8,h:47},{k:"rect",x:108,y:143,w:8,h:47},{k:"rect",x:140,y:182,w:40,h:8},{k:"plate",at:"nKnee",dx:-6,dy:-12}],focus:["nToe","nHeel"],cap:"Oransje: stortåa og hælen.",
-      steps:["Sitt med knærne i 90 grader og fotballene på en skive eller et step.","Legg vekten på lårene, rett over knærne.","Senk hælene og press deg opp på tærne."],
-      cues:["Med bøyde knær trener du den dype leggmuskelen, som tar mest belastning når du løper.","Rolig tempo: 2 sekunder ned og 1 sekund pause i toppen.","Press gjennom stortåa."],
-      err:["Hopper over øvelsen.","For tung vekt og kort bevegelse."]},
-    cph:{n:"Copenhagen-planke",t:"Copenhagen-planke",sub:"Sideplanke med øverste fot på en benk. Lettere: kneet på benken.",root:"fElb",
-      A:{r:[64,186],t:-100,nl:[100,100,10],fl:[100,0,90],na:[150,210],fa:[0,-90]},
-      B:{r:[64,186],t:-96,nl:[96,96,10],fl:[96,0,90],na:[150,210],fa:[0,-90]},
-      props:[{k:"rect",x:175,y:138,w:60,h:10},{k:"rect",x:185,y:148,w:8,h:42},{k:"rect",x:220,y:148,w:8,h:42}],focus:["hip","nAnk"],cap:"Oransje: hoften og foten på benken.",
-      steps:["Ligg på siden med albuen rett under skulderen.","Legg innsiden av øverste fot, eller kneet, på en benk.","Løft hoftene til kroppen er i en rett linje. Det nederste beinet henger fritt.","Hold tiden og bytt side."],
-      cues:["Press øverste bein ned i benken. Det er innsiden av låret som jobber.","Kroppen i en rett linje fra hode til fot. Ikke la hofta synke.","Skyv albuen ned i gulvet så skulderen ikke kryper opp mot øret.","Pust rolig gjennom hele holdet."],
-      err:["Hofta synker.","Skulderen kryper opp mot øret."]},
-    bench:{n:"Benkpress",t:"Benkpress eller manualpress",sub:"Med stang eller manualer. Samme teknikk.",root:"hip",
-      A:{r:[128,140],t:-90,nl:[80,-10,90],fl:[80,-10,90],na:[180,180],fa:[180,180]},
-      B:{r:[128,140],t:-90,nl:[80,-10,90],fl:[80,-10,90],na:[30,180],fa:[30,180]},
-      props:[{k:"rect",x:40,y:146,w:100,h:10},{k:"rect",x:50,y:156,w:8,h:34},{k:"rect",x:122,y:156,w:8,h:34},{k:"plate",at:"nHand",dx:0,dy:0}],focus:["nElb","nAnk"],cap:"Oransje: albuen og føttene.",
-      steps:["Ligg med øynene rett under stangen og føttene godt plantet.","Trekk skulderbladene sammen og ned.","Senk stangen kontrollert til nedre del av brystet.","Press opp og litt bakover mot skuldrene."],
-      cues:["Press føttene i gulvet og hold rumpa på benken.","Albuene ca. 45 grader ut fra kroppen, ikke 90.","Håndleddene rett over albuene i bunnen.","Hold skulderbladene samlet gjennom hele settet."],
-      err:["Stangen spretter på brystet.","Albuene peker rett ut til siden.","Rumpa løfter seg fra benken."]},
-    pullup:{n:"Pull-ups",t:"Pull-ups eller nedtrekk",sub:"Lettere: strikk under føttene, eller nedtrekk i maskin.",root:"nHand",
-      A:{r:[128,8],t:-4,nl:[8,-75,10],fl:[12,-70,10],na:[180,180],fa:[180,180]},
-      B:{r:[128,8],t:-8,nl:[14,-70,10],fl:[18,-65,10],na:[8,172],fa:[8,172]},
-      props:[{k:"barfix",x1:70,x2:200,y:8}],focus:["nElb"],cap:"Oransje: albuen drar ned mot lomma.",
-      steps:["Heng med hendene litt bredere enn skuldrene.","Trekk skuldrene ned fra ørene før du drar.","Dra deg opp til haka er over stanga.","Senk deg kontrollert helt ned."],
-      cues:["Tenk at du drar albuene ned i baklomma.","Stram mage og sete så kroppen ikke svinger.","Nedtrekk: dra stanga til øvre del av brystet og len deg bare litt bakover.","Pust ut på vei opp."],
-      err:["Halve repetisjoner.","Sving og rykk for å komme opp."]},
-    row:{n:"Sittende roing",t:"Sittende roing med kabel",sub:"Kabel med V-håndtak, føttene mot plattformen.",root:"hip",
-      A:{r:[90,166],t:12,nl:[80,60,170],fl:[80,60,170],na:[85,88],fa:[85,88]},
-      B:{r:[90,166],t:0,nl:[80,60,170],fl:[80,60,170],na:[-30,75],fa:[-30,75]},
-      props:[{k:"rect",x:60,y:170,w:60,h:20},{k:"rect",x:182,y:110,w:12,h:80},{k:"cable",from:[188,128],at:"nHand"}],focus:["nElb"],cap:"Oransje: albuen går rett bakover.",
-      steps:["Sitt med føttene mot plattformen og en lett bøy i knærne.","Grip håndtaket med strake armer og rett rygg.","Dra håndtaket inn mot navlen.","Strekk armene kontrollert ut igjen."],
-      cues:["Start med å trekke skulderbladene sammen, så albuene.","Albuene tett inntil kroppen.","Overkroppen står nesten stille. Ikke bruk ryggen til å kaste vekten.","Brystet opp mot håndtaket."],
-      err:["Lener seg langt bakover.","Skuldrene trekkes opp mot ørene."]},
-    ohp:{n:"Skulderpress",t:"Skulderpress med manualer",sub:"Stående eller sittende med manualer.",root:"nAnk",
-      A:{r:[118,186],t:0,...STAND,na:[10,180],fa:[10,180]},
-      B:{r:[118,186],t:0,...STAND,na:[178,180],fa:[178,180]},
-      props:[{k:"db",at:"nHand"}],focus:["hip","nHand"],cap:"Oransje: hånden over albuen og stabile hofter.",
-      steps:["Stå med føttene i hoftebredde og manualene i skulderhøyde.","Stram mage og sete.","Press manualene rett opp til armene er strake.","Senk kontrollert til skulderhøyde."],
-      cues:["Hold ribbeina nede. Ikke len deg bakover.","Klem setet for å holde korsryggen stabil.","Underarmene loddrette under vekten.","Skyv hodet litt fram når armene passerer ansiktet."],
-      err:["Svai i korsryggen.","Albuene peker rett ut til siden og vekten havner bak hodet."]},
-    facepull:{n:"Face pulls",t:"Face pulls",sub:"Kabel i ansiktshøyde med tauhåndtak. Lett vekt.",root:"nAnk",
-      A:{r:[110,186],t:-4,nl:[10,0,90],fl:[-10,0,90],na:[95,95],fa:[95,95]},
-      B:{r:[110,186],t:-2,nl:[10,0,90],fl:[-10,0,90],na:[-100,170,.5],fa:[-100,170,.5]},
-      props:[{k:"rect",x:214,y:20,w:12,h:170},{k:"cable",from:[214,50],at:"nHand"}],focus:["nElb"],cap:"Oransje: albuen holdes høyt.",
-      steps:["Still kabelen i ansiktshøyde med tauhåndtak.","Grip tauet med tomlene mot deg og ta et skritt bakover.","Dra tauet mot ansiktet og før hendene ut på hver side av hodet.","Hold i ett sekund og slipp kontrollert."],
-      cues:["Albuene høyt, i høyde med skuldrene.","Tenk at du viser fram bicepsen på slutten.","Hold nakken avslappet og skuldrene langt fra ørene.","Bruk lett vekt. Øvelsen er for holdning og skuldre."],
-      err:["For tung vekt, så du lener deg bakover.","Albuene faller ned."]},
-    pullapart:{n:"Band pull-aparts",t:"Band pull-aparts",sub:"Vist forfra. Treningsstrikk i strake armer.",root:"nAnk",front:true,
-      A:{r:[132,186],t:0,nl:[8,4,90],fl:[-8,-4,-90],na:[-90,-90,.25,.25],fa:[90,90,.25,.25]},
-      B:{r:[132,186],t:0,nl:[8,4,90],fl:[-8,-4,-90],na:[90,90],fa:[-90,-90]},
-      props:[{k:"band"}],focus:["sh"],cap:"Forfra. Oransje: skuldrene holdes lave.",
-      steps:["Hold strikken i strake armer foran deg i skulderhøyde.","Dra strikken fra hverandre til den treffer brystet.","Slipp kontrollert tilbake."],
-      cues:["Bevegelsen kommer fra skulderbladene.","Armene nesten strake.","Skuldrene langt fra ørene. Kjenn at nakken er avslappet.","Gjør dem gjerne mellom sett eller når du har sittet lenge."],
-      err:["Trekker skuldrene opp.","Svai i korsryggen."]},
-    pallof:{n:"Pallof press",t:"Pallof press",sub:"Vist forfra. Kabelen drar fra siden, og du presser armene rett fram mot deg.",root:"nAnk",front:true,
-      A:{r:[132,186],t:0,nl:[10,4,90],fl:[-10,-4,-90],na:[10,-150,1,.6],fa:[-10,150,1,.6]},
-      B:{r:[132,186],t:0,nl:[10,4,90],fl:[-10,-4,-90],na:[20,20,.4,.4],fa:[-20,-20,.4,.4]},
-      props:[{k:"rect",x:220,y:20,w:12,h:170},{k:"cable",from:[220,88],at:"nHand"}],focus:["hip","sh"],cap:"Forfra. Oransje: hofter og skuldre peker rett fram.",
-      steps:["Stå sidelengs til kabelen med håndtaket i begge hender inntil brystet.","Føttene i hoftebredde og en lett bøy i knærne.","Press armene rett fram, hold i 2 sekunder og før dem tilbake.","Bytt side."],
-      cues:["Ikke la kabelen vri deg. Det er hele poenget.","Stram mage og sete.","Hofter og skuldre peker rett fram hele tiden.","Pust ut når du presser fram."],
-      err:["Overkroppen roterer mot kabelen.","Står for nær, så det blir for lett."]},
-    deadbug:{n:"Dead bug",t:"Dead bug",sub:"På ryggen på gulvet.",root:"hip",
-      A:{r:[132,182],t:-90,nl:[180,90,180],fl:[180,90,180],na:[180,180],fa:[180,180]},
-      B:{r:[132,182],t:-90,nl:[180,90,180],fl:[96,96,180],na:[-96,-96],fa:[180,180]},
-      props:[],focus:["hip"],cap:"Oransje: korsryggen presses mot gulvet.",
-      steps:["Ligg på ryggen med armene rett opp og knær og hofter i 90 grader.","Press korsryggen lett ned i gulvet.","Strekk motsatt arm og bein sakte ut, uten at korsryggen løfter seg.","Før dem tilbake og bytt side."],
-      cues:["Korsryggen holder kontakt med gulvet hele tiden.","Pust ut når du strekker ut.","Sakte er vanskeligere og bedre.","Ta en kortere bevegelse hvis ryggen løfter seg."],
-      err:["Svai i korsryggen.","For raskt."]},
-    deadlift:{n:"Markløft",t:"Markløft (konvensjonell eller trap bar)",sub:"Stang over midtfoten. Trap bar er skånsom for ryggen.",root:"nAnk",
-      A:{r:[118,186],t:60,nl:[65,-18,90],fl:[65,-18,90],na:[0,0],fa:[0,0]},
-      B:{r:[118,186],t:0,...STAND,na:[0,0],fa:[0,0]},
-      props:[{k:"plate",at:"nHand",dx:0,dy:8,r:20}],focus:["nHeel","hip"],cap:"Oransje: midtfot og hofter.",
-      steps:["Stå med stangen over midtfoten og føttene i hoftebredde.","Bøy deg ned og grip stangen rett utenfor beina.","Senk hoftene til leggene treffer stangen, og løft brystet.","Press gulvet bort og reis deg til du står rett."],
-      cues:["Press gulvet bort med hele foten, med vekten på midtfot og hæl.","Stram armhulene, som om du klemmer appelsiner.","La stangen gli langs leggene og lårene.","Hofter og skuldre stiger i samme tempo."],
-      err:["Runder ryggen.","Rykker i stangen fra gulvet.","Lener seg bakover i toppen."]},
-    stepup:{n:"Step-ups",t:"Step-ups på kasse",sub:"Kasse i knehøyde eller litt lavere. Manualer i hendene.",root:"nAnk",
-      A:{r:[140,156],t:20,nl:[70,-20,90],fl:[-15,-10,90],na:[0,0],fa:[0,0]},
-      B:{r:[140,156],t:0,nl:[0,0,90],fl:[80,0,90],na:[0,0],fa:[0,0]},
-      props:[{k:"rect",x:118,y:160,w:80,h:30},{k:"db",at:"nHand"}],focus:["nHeel"],cap:"Oransje: hælen på kassen.",
-      steps:["Sett hele foten på kassen.","Press deg opp med beinet på kassen til du står rett.","Senk deg kontrollert ned med samme bein.","Gjør alle reps på ett bein, så bytt."],
-      cues:["Press gjennom hælen på foten som står på kassen.","Ikke dytt fra med bakerste fot.","Hold kneet i linje med tærne.","Stå helt rett i toppen før du går ned."],
-      err:["Fraspark med bakre fot.","Kneet faller innover."]},
-    dbrow:{n:"Enarms manualroing",t:"Enarms manualroing",sub:"Ett kne og samme hånd på benken.",root:"hip",
-      A:{r:[90,120],t:80,nl:[45,20,90],fl:[-5,-90,-90],na:[0,0],fa:[0,-20]},
-      B:{r:[90,120],t:80,nl:[45,20,90],fl:[-5,-90,-90],na:[-160,0],fa:[0,-20]},
-      props:[{k:"rect",x:30,y:166,w:125,h:10},{k:"rect",x:40,y:176,w:8,h:14},{k:"rect",x:138,y:176,w:8,h:14},{k:"db",at:"nHand"}],focus:["nElb"],cap:"Oransje: albuen drar mot hofta.",
-      steps:["Legg ett kne og samme hånd på benken.","Hold ryggen rett og parallell med gulvet.","Dra manualen opp mot hofta.","Senk kontrollert til armen er strak."],
-      cues:["Dra albuen mot hofta, ikke rett opp.","Hold skuldrene i samme høyde. Ikke vri overkroppen.","Nakken i forlengelse av ryggen.","Pust ut på vei opp."],
-      err:["Rykker og vrir for å få opp vekten.","Runder ryggen."]},
-    pushup:{n:"Push-ups",t:"Push-ups eller skråbenk med manualer",sub:"Skråbenk: som benkpress med benken på ca. 30 grader.",root:"nToe",
-      A:{r:[40,188],t:72,nl:[-72,-72,0],fl:[-72,-72,0],na:[0,0],fa:[0,0]},
-      B:{r:[40,188],t:82,nl:[-82,-82,0],fl:[-82,-82,0],na:[-80,0],fa:[-80,0]},
-      props:[],focus:["hip"],cap:"Oransje: hoftene i linje med kroppen.",
-      steps:["Sett hendene litt bredere enn skuldrene.","Kroppen i en rett linje fra hode til hæl.","Senk brystet til nesten gulvet.","Press opp igjen."],
-      cues:["Stram sete og mage så hoftene ikke henger.","Albuene ca. 45 grader ut fra kroppen.","Skru hendene lett ned i gulvet.","Lettere: hendene på en benk."],
-      err:["Hoftene henger eller stikker opp.","Halve repetisjoner."]},
-    slrdl:{n:"Ettbeins markløft",t:"Ettbeins rumensk markløft",sub:"Manual i motsatt hånd av standbeinet.",root:"nAnk",
-      A:{r:[110,186],t:0,nl:[0,0,90],fl:[-6,-6,90],na:[0,0],fa:[0,0]},
-      B:{r:[110,186],t:78,nl:[18,-6,90],fl:[-100,-100,-10],na:[0,0],fa:[0,0]},
-      props:[{k:"db",at:"nHand"}],focus:["hip"],cap:"Oransje: hofta peker ned i gulvet.",
-      steps:["Stå på ett bein med en manual i motsatt hånd.","Bøy fram fra hofta mens bakre bein strekker seg bakover.","Gå ned til overkroppen er nesten vannrett, eller til du kjenner strekk bak på låret.","Reis deg ved å skyve hofta fram."],
-      cues:["Hoftene peker rett ned i gulvet. Ikke åpne hofta mot taket.","Lett bøy i standkneet.","Overkroppen og bakre bein beveger seg som en vippe.","Hold deg i noe med den ledige hånda hvis balansen svikter."],
-      err:["Hofta roterer opp mot taket.","Runder ryggen."]},
-    sideplank:{n:"Sidebro",t:"Sidebro",sub:"På underarmen. Lettere: knærne i gulvet.",root:"nAnk",
-      A:{r:[212,184],t:-80,nl:[80,80,90],fl:[80,80,90],na:[95,80],fa:[0,-90]},
-      B:{r:[212,184],t:-80,nl:[80,80,90],fl:[80,80,90],na:[180,180],fa:[0,-90]},
-      props:[],focus:["hip"],cap:"Oransje: hofta holdes oppe.",
-      steps:["Ligg på siden med albuen rett under skulderen.","Legg føttene oppå hverandre eller etter hverandre.","Løft hoftene til kroppen er rett.","Hold tiden og bytt side."],
-      cues:["Press underarmen ned i gulvet.","Skyv hoftene litt fram, ikke bakover.","Rett linje fra hode til føtter.","Pust rolig."],
-      err:["Hofta synker.","Skulderen kryper opp mot øret."]},
-    farmer:{n:"Farmer's walk",t:"Farmer's walk",sub:"Tunge manualer eller kettlebells, 30–40 meter.",root:"hip",
-      A:{r:[120,102],t:0,nl:[20,10,90],fl:[-15,-25,90],na:[0,0],fa:[0,0]},
-      B:{r:[120,102],t:0,nl:[-15,-25,90],fl:[20,10,90],na:[0,0],fa:[0,0]},
-      props:[{k:"db",at:"nHand"}],focus:["sh"],cap:"Oransje: skuldrene ned og bak.",
-      steps:["Løft tunge manualer eller kettlebells som i et markløft.","Gå med korte, raske steg.","Gå 30–40 meter og sett ned kontrollert."],
-      cues:["Høy og rank: tenk at noen drar deg opp etter håret.","Skuldrene ned og bak.","Stramt grep og stram mage.","Pust rolig. Ikke hold pusten."],
-      err:["Lener seg til siden.","Skuldrene henger fram."]},
-    boxjump:{n:"Bokshopp",t:"Bokshopp",sub:"Lav kasse holder. Høyden er ikke poenget.",root:"nAnk",
-      A:{r:[70,186],t:35,nl:[50,-20,90],fl:[50,-20,90],na:[-60,-50],fa:[-60,-50]},
-      B:{r:[160,146],t:30,nl:[60,-20,90],fl:[60,-20,90],na:[70,80],fa:[70,80]},
-      props:[{k:"rect",x:128,y:150,w:80,h:40}],focus:["nKnee"],cap:"Oransje: kneet i linje med tærne ved landing.",
-      steps:["Stå en halv meter fra kassen.","Sving armene bakover og bøy i knær og hofte.","Hopp eksplosivt opp og land mykt på hele foten.","Gå ned fra kassen. Ikke hopp ned."],
-      cues:["Land stille og mykt i en halv knebøy.","Knærne i linje med tærne ved landing.","Ta full hvile mellom hoppene. Kvalitet foran mengde.","Bruk armene aktivt i satsen."],
-      err:["For høy kasse.","Hopper ned, som belaster akillessenen unødig."]},
-    hop:{n:"Hopp på ett bein",t:"Hopp på ett bein",sub:"Små, kontrollerte hopp.",root:"nAnk",
-      A:{r:[100,186],t:15,nl:[40,-20,90],fl:[60,-60,30],na:[-40,-30],fa:[-40,-30]},
-      B:{r:[128,160],t:5,nl:[0,10,40],fl:[60,-60,30],na:[60,90],fa:[60,90]},
-      props:[],focus:["nKnee"],cap:"Oransje: kneet over tærne.",
-      steps:["Stå på ett bein.","Bøy lett i kneet og hopp opp eller framover.","Land mykt på samme bein og hold balansen i 2 sekunder.","Gjør alle hoppene, så bytt bein."],
-      cues:["Land på fotballen og rull ned på hele foten.","Kneet over tærne, ikke innover.","Hold hofta i vater.","Start med små hopp."],
-      err:["Kneet faller innover ved landing.","Hard og bråkete landing."]}
-  };
-
-  const D=Math.PI/180;
-  const step=(p,l,a)=>[p[0]+Math.sin(a*D)*l,p[1]+Math.cos(a*D)*l];
-  function fk(p,root){
-    const P={hip:[0,0]};
-    P.sh=[Math.sin(p.t*D)*L.torso,-Math.cos(p.t*D)*L.torso];
-    P.head=[P.sh[0]+Math.sin(p.t*D)*L.neck,P.sh[1]-Math.cos(p.t*D)*L.neck];
-    [["n",p.nl,p.na],["f",p.fl,p.fa]].forEach(([s,lg,ar])=>{
-      P[s+"Knee"]=step(P.hip,L.thigh,lg[0]); P[s+"Ank"]=step(P[s+"Knee"],L.shin,lg[1]);
-      P[s+"Toe"]=step(P[s+"Ank"],L.foot,lg[2]); P[s+"Heel"]=step(P[s+"Ank"],4,lg[2]+180);
-      P[s+"Elb"]=step(P.sh,L.up*(ar[2]||1),ar[0]); P[s+"Hand"]=step(P[s+"Elb"],L.fore*(ar[3]||1),ar[1]);
-    });
-    const o=P[root]; const dx=p.r[0]-o[0], dy=p.r[1]-o[1];
-    for(const k in P) P[k]=[P[k][0]+dx,P[k][1]+dy];
-    return P;
-  }
-  const lerp=(a,b,u)=>a+(b-a)*u;
-  function mix(A,B,u){
-    const o={r:[lerp(A.r[0],B.r[0],u),lerp(A.r[1],B.r[1],u)],t:lerp(A.t,B.t,u)};
-    const nz=(a,arm)=>arm?[a[0],a[1],a[2]??1,a[3]??1]:a;
-    ["nl","fl","na","fa"].forEach(k=>{const arm=k[1]==="a", a=nz(A[k],arm), b=nz(B[k],arm); o[k]=a.map((v,i)=>lerp(v,b[i],u));});
-    return o;
-  }
-  const f1=n=>Math.round(n*10)/10;
-  const path=(pts)=>"M"+pts.map(p=>f1(p[0])+" "+f1(p[1])).join("L");
-  function draw(ex,pose,P){
-    const out=[`<line class="gnd" x1="0" y1="${G}" x2="240" y2="${G}" stroke-width="2"/>`];
-    const PA=fk(ex.A,ex.root);
-    ex.props.forEach(pr=>{
-      if(pr.k==="rect") out.push(`<rect class="prop" x="${pr.x}" y="${pr.y}" width="${pr.w}" height="${pr.h}" rx="2" stroke-width="1.5"/>`);
-      if(pr.k==="barfix") out.push(`<line class="gnd" x1="${pr.x1}" y1="${pr.y}" x2="${pr.x2}" y2="${pr.y}" stroke-width="4" stroke-linecap="round"/>`);
-    });
-    const limbs=s=>[path([P.hip,P[s+"Knee"],P[s+"Ank"],P[s+"Toe"]]),path([P.sh,P[s+"Elb"],P[s+"Hand"]])];
-    const seg=(d,c)=>`<path d="${d}" class="${c}" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`;
-    limbs("f").forEach(d=>out.push(seg(d,"lim-f")));
-    out.push(seg(path([P.hip,P.sh]),"lim-n").replace('stroke-width="7"','stroke-width="9"'));
-    out.push(`<circle class="hd" cx="${f1(P.head[0])}" cy="${f1(P.head[1])}" r="${L.head}"/>`);
-    limbs("n").forEach(d=>out.push(seg(d,"lim-n")));
-    ex.props.forEach(pr=>{
-      const at=pr.at&&P[pr.at];
-      if(pr.k==="plate") out.push(`<circle class="plate" cx="${f1(at[0]+(pr.dx||0))}" cy="${f1(at[1]+(pr.dy||0))}" r="${pr.r||18}" stroke-width="2"/><circle class="hd" cx="${f1(at[0]+(pr.dx||0))}" cy="${f1(at[1]+(pr.dy||0))}" r="3"/>`);
-      if(pr.k==="db") out.push(`<rect class="plate" x="${f1(at[0]-9)}" y="${f1(at[1]-4)}" width="18" height="8" rx="3" stroke-width="2"/>`);
-      if(pr.k==="cable") out.push(`<line class="wire" x1="${pr.from[0]}" y1="${pr.from[1]}" x2="${f1(at[0])}" y2="${f1(at[1])}" stroke-width="2"/>`);
-      if(pr.k==="band") out.push(`<path class="wire" d="M${f1(P.nHand[0])} ${f1(P.nHand[1])}L${f1(P.fHand[0])} ${f1(P.fHand[1])}" stroke-width="3" fill="none"/>`);
-    });
-    (ex.focus||[]).forEach(k=>{const q=P[k]; if(q) out.push(`<circle class="foc" cx="${f1(q[0])}" cy="${f1(q[1])}" r="8" stroke-width="2.5"/>`);});
-    return out.join("");
-  }
-  function frame(ex,u){const p=mix(ex.A,ex.B,u); return draw(ex,p,fk(p,ex.root));}
-
-  // ---------- dialog ----------
-  const dlg=document.getElementById("exd"), svg=document.getElementById("exd-svg");
-  const playBtn=document.getElementById("exd-play"), phaseEl=document.getElementById("exd-phase");
-  const reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let cur=null, raf=0, playing=!reduce, t0=0, frozenU=0;
-  const CYCLE=4400;
-  function uAt(ms){
-    const x=(ms%CYCLE)/CYCLE; // hold A, move, hold B, move back
-    const ease=v=>v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2;
-    if(x<.15) return 0; if(x<.5) return ease((x-.15)/.35); if(x<.65) return 1; return 1-ease((x-.65)/.35);
-  }
-  function paint(u){svg.innerHTML=frame(cur,u); phaseEl.textContent=u<.5?"Start":"Slutt";}
-  function tick(ts){ if(!t0) t0=ts; frozenU=uAt(ts-t0); paint(frozenU); raf=requestAnimationFrame(tick); }
-  function setPlaying(on){
-    playing=on; cancelAnimationFrame(raf); playBtn.textContent=on?"Pause":"Spill av";
-    if(on){ t0=0; raf=requestAnimationFrame(tick); }
-  }
-  playBtn.addEventListener("click",()=>{
-    if(playing) setPlaying(false);
-    else setPlaying(true);
-  });
-  svg.addEventListener("click",()=>{ if(!playing){ frozenU=frozenU<.5?1:0; paint(frozenU);} });
-  function fill(id,arr){const el=document.getElementById(id); el.textContent=""; arr.forEach(s=>{const li=document.createElement("li"); li.textContent=s; el.append(li);});}
-  function open(id){
-    const ex=EX[id]; if(!ex) return; cur=ex;
-    document.getElementById("exd-title").textContent=ex.t;
-    document.getElementById("exd-sub").textContent=ex.sub;
-    const cap=document.getElementById("exd-cap"); cap.innerHTML='<span class="fdot"></span>'; cap.append(document.createTextNode(ex.cap+(playing?"":" Trykk på figuren for å bytte mellom start og slutt.")));
-    fill("exd-steps",ex.steps); fill("exd-cues",ex.cues); fill("exd-err",ex.err);
-    frozenU=0; paint(0);
-    if(dlg.showModal){ try{dlg.showModal()}catch(e){dlg.setAttribute("open","")} } else dlg.setAttribute("open","");
-    setPlaying(playing);
-  }
-  function close(){cancelAnimationFrame(raf); if(dlg.close) dlg.close(); else dlg.removeAttribute("open");}
-  document.getElementById("exd-close").addEventListener("click",close);
-  dlg.addEventListener("close",()=>cancelAnimationFrame(raf));
-  dlg.addEventListener("click",e=>{ if(e.target===dlg) close(); });
-  document.addEventListener("click",e=>{const b=e.target.closest("[data-ex]"); if(b){e.preventDefault(); open(b.dataset.ex);}});
-
-  // Name the session chips, and make strength-table names clickable.
-  document.querySelectorAll(".exbtn[data-ex]").forEach(b=>{const ex=EX[b.dataset.ex]; if(ex) b.textContent=ex.n;});
-  const byTable={}; for(const k in EX) byTable[EX[k].t]=k;
-  document.querySelectorAll("#styrke tbody tr td:first-child").forEach(td=>{
-    const id=byTable[td.textContent.trim()]; if(!id) return;
-    const b=document.createElement("button"); b.type="button"; b.className="exlink"; b.dataset.ex=id; b.textContent=td.textContent.trim();
-    td.textContent=""; td.append(b);
-  });
-})();
-</script>
-
+<section id="okt" class="okt" hidden aria-label="Aktiv økt">
+  <div class="okt-in">
+    <div class="okt-head">
+      <div class="okt-tt"><div class="eyebrow" id="okt-eyebrow"></div><h2 id="okt-title"></h2><span class="okt-clock" id="okt-clock"></span></div>
+      <div class="okt-actions">
+        <button type="button" class="btn ghost small" id="okt-back">Til planen</button>
+        <button type="button" class="btn ghost small" id="okt-cancel">Avbryt</button>
+        <button type="button" class="btn primary" id="okt-finish">Fullfør</button>
+      </div>
+    </div>
+    <div id="okt-confirm" class="okt-confirm" role="alert" hidden></div>
+    <p class="okt-hint">Vektene er fylt inn fra forrige gang eller fra forslaget. Endre om nødvendig, og trykk ✓ når settet er ferdig. Da starter pausetimeren.</p>
+    <div id="okt-list" class="okt-list"></div>
+  </div>
+</section>
+<div id="timer" class="timer" hidden role="timer" aria-live="polite">
+  <div class="timer-txt"><b id="timer-t">0:00</b><span id="timer-l"></span></div>
+  <div class="timer-btns"><button type="button" id="timer-minus">−15</button><button type="button" id="timer-plus">+15</button><button type="button" id="timer-stop">Stopp</button></div>
+</div>
+<div id="toast" class="toast" hidden role="status"></div>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
