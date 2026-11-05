@@ -7,11 +7,13 @@ export const LIGHT=new Set([4,8,12,16,20,24,28,32,36,40,44]);
 export const PHASES=[
   {n:1,name:"Gjenoppstart",from:0,to:8,desc:"Alt rolig, målt i minutter. Mål: 40–60 min sammenhengende uten å bli støl dagen etter."},
   {n:2,name:"Grunnlag",from:9,to:24,desc:"Tre turer i uka. Langturen øker fra 8 til 14 km. Stigningsløp fra februar, fartlek fra mars."},
-  {n:3,name:"Bygging",from:25,to:40,desc:"Én kvalitetsøkt i uka. Langtur opp mot 18 km. Styrke ned til to økter."},
+  {n:3,name:"Bygging",from:25,to:40,desc:"Én kvalitetsøkt i uka. Fra uke 29 fire turer i uka, med en kort restitusjonstur søndag. Langtur opp mot 18 km. Styrke ned til to økter."},
   {n:4,name:"Spesifikk forberedelse",from:41,to:47,desc:"Bli komfortabel i 5:40-tempo. Lengste tur 20 km og generalprøve."},
   {n:5,name:"Nedtrapping",from:48,to:49,desc:"Mindre volum, litt fart. Ingen tunge løft."}
 ];
 // [tirsdag, torsdag (løp), fredag, lørdag]. "K|" = kvalitetsøkt.
+// Uker med løp både torsdag og fredag får fredagsturen flyttet til søndag (se SUNDAY), så du aldri løper tre dager på rad
+// og møter langturen uthvilt.
 const RUN={
   0:["30 min rolig","","","20–25 min rolig hvis stølheten er borte. Ellers 30–45 min gåtur."],
   1:["25 min rolig. Gå-pauser er greit.","","","30 min rolig"],
@@ -132,10 +134,15 @@ export function prescribe(w,day,id){
   return {sets,reps:b.reps,rir,per:b.per||""};
 }
 
-function runSession(d,txt,isLong){
+function runSession(d,txt,isLong,recovery){
   if(!txt) return null;
   const q=txt.startsWith("K|"); const t=q?txt.slice(2):txt;
-  return {d,k:isLong?"long":(q?"q":"run"),title:isLong?"Langtur":(q?"Kvalitetsøkt":"Rolig tur"),info:t,wu:q?"wu-kval":"wu-rolig"};
+  return {d,k:isLong?"long":(q?"q":"run"),title:isLong?"Langtur":(q?"Kvalitetsøkt":(recovery?"Restitusjonstur":"Rolig tur")),info:t,wu:q?"wu-kval":"wu-rolig"};
+}
+// Dagen etter langturen: kortere og roligere enn fredagsturen den erstatter.
+function SUNDAY(fri){
+  const km=parseInt(fri,10);
+  return `${Math.max(4,km-2)} km veldig rolig, dagen etter langturen. Kjennes beina tunge, gå i stedet.`;
 }
 
 export const ORDER={man:0,tir:1,ons:2,tor:3,fre:4,"lør":5,"søn":6};
@@ -146,7 +153,8 @@ export const MONTHS=["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt"
 export const weeks=[];
 for(let w=0;w<=49;w++){
   const r=RUN[w]; const s=[...gym(w)];
-  [runSession("tir",r[0]),runSession("tor",r[1]),runSession("fre",r[2]),runSession("lør",r[3],w!==49&&w!==0)].forEach(x=>x&&s.push(x));
+  const toSun=r[1]&&r[2]&&w<49;
+  [runSession("tir",r[0]),runSession("tor",r[1]),toSun?runSession("søn",SUNDAY(r[2]),false,true):runSession("fre",r[2]),runSession("lør",r[3],w!==49&&w!==0)].forEach(x=>x&&s.push(x));
   if(w===49){
     const sat=s.find(x=>x.d==="lør"); if(sat){sat.k="run";sat.title="Rolig tur";}
     s.push({d:"søn",k:"race",title:"Amsterdam halvmaraton",info:"Start rolig: første 5 km i ca. 5:45, deretter 5:40. Øk bare hvis du føler deg sterk etter 15 km.",wu:"wu-kval"});
