@@ -48,7 +48,7 @@ function renderPlan(){
           s.ex.forEach(eid=>{const b=document.createElement("button");b.type="button";b.className="exbtn";b.dataset.ex=eid;b.textContent=exName(eid);ex.append(b);});
           txt.append(ex);
           const go=document.createElement("button"); go.type="button"; go.className="btn primary small startbtn"; go.textContent="Start økt";
-          go.addEventListener("click",()=>startSession(s));
+          go.addEventListener("click",()=>start(s));
           txt.append(go);
         }
         const wu=document.createElement("a"); wu.className="wu"; wu.href="#"+s.wu; wu.textContent="Oppvarming";
@@ -77,6 +77,14 @@ function paint(){
 function saveProgress(){ store.set("state/progress",{done:{...progress},updated:Date.now()}); }
 function markDone(key){ progress[key]=true; paint(); saveProgress(); }
 
+// Wait until we know whether you are signed in, so a session is never started in the browser
+// while your data is in the cloud (or the other way round).
+let storeReady=null;
+async function start(s){
+  if(!state.ready) toast("Kobler til lagringen …");
+  await storeReady; startSession(s);
+}
+
 // ---------- today / resume ----------
 let todayTok=0;
 async function renderToday(){
@@ -97,7 +105,7 @@ async function renderToday(){
     const b=document.createElement("div"); b.className="banner";
     const p=document.createElement("p"); p.innerHTML=`<b>I dag:</b> `; p.append(document.createTextNode(`${s.title} · ${s.ex.length} øvelser`));
     const go=document.createElement("button"); go.type="button"; go.className="btn primary"; go.textContent="Start dagens økt";
-    go.addEventListener("click",()=>startSession(s));
+    go.addEventListener("click",()=>start(s));
     b.append(p,go); box.append(b);
   }
 }
@@ -143,4 +151,4 @@ initExerciseDialog();
 initSession({markDone,onClose:()=>renderToday()});
 paint();
 onStoreState(onState);
-initStore();
+storeReady=initStore();

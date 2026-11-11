@@ -174,7 +174,7 @@ function card(it,ii){
   const nl=el("label","note"); const nid=`note-${it.ex}`;
   const ns=el("span","notelbl","Notat til deg selv"); nl.htmlFor=nid;
   const ta=document.createElement("textarea"); ta.id=nid; ta.rows=1; ta.placeholder="F.eks. grep, innstilling på maskinen, hva du skal huske neste gang"; ta.value=m.note||"";
-  ta.addEventListener("input",()=>{ meta[it.ex].note=ta.value; clearTimeout(noteT[it.ex]); noteT[it.ex]=setTimeout(()=>store.merge("exercises/"+it.ex,{note:ta.value}),700); });
+  ta.addEventListener("input",()=>{ meta[it.ex].note=ta.value; clearTimeout(noteT[it.ex]); noteT[it.ex]=setTimeout(()=>{delete noteT[it.ex]; store.merge("exercises/"+it.ex,{note:ta.value});},700); });
   nl.append(ns,ta); c.append(nl);
 
   // sets
@@ -309,7 +309,14 @@ async function keepAwake(){
   try{ if("wakeLock" in navigator){ wake=await navigator.wakeLock.request("screen"); } }catch(e){}
 }
 function releaseAwake(){ try{wake&&wake.release(); wake=null;}catch(e){} }
-document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&S&&!$("okt").hidden) keepAwake(); if(document.visibilityState==="visible"&&!$("timer").hidden) tickTimer(); });
+// Write everything at once when the page goes to the background or closes, so nothing waits on a timer
+// that iPhone may never let run.
+function flush(){
+  if(S) save(true);
+  for(const id in noteT){ clearTimeout(noteT[id]); delete noteT[id]; if(meta[id]) store.merge("exercises/"+id,{note:meta[id].note||""}); }
+}
+window.addEventListener("pagehide",flush);
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") flush(); if(document.visibilityState==="visible"&&S&&!$("okt").hidden) keepAwake(); if(document.visibilityState==="visible"&&!$("timer").hidden) tickTimer(); });
 
 let toastT=0;
 export function toast(msg){ const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{t.hidden=true;},4000); }
