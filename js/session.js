@@ -103,10 +103,19 @@ function save(now){
   const go=()=>{ if(S) store.set("sessions/"+S.id,JSON.parse(JSON.stringify(S))); };
   if(now) go(); else saveT=setTimeout(go,500);
 }
+/** True if anything has been logged in the session (a ticked set or a typed count). */
+export function hasData(s){
+  return !!(s&&s.items&&s.items.some(it=>it.sets.some(x=>x.done||x.reps!=null||x.sec!=null||x.m!=null)));
+}
 export async function getActive(){
   const a=await store.get("state/active"); if(!a||!a.id) return null;
   const s=await store.get("sessions/"+a.id);
-  return s&&s.status==="active"?s:null;
+  if(!s||s.status!=="active") return null;
+  // An empty session for a day you have already finished is a leftover: clear it instead of sending you back to it.
+  if(hooks.isDone&&hooks.isDone(s.key)&&!hasData(s)){
+    store.del("sessions/"+s.id); store.set("state/active",{id:null}); return null;
+  }
+  return s;
 }
 async function loadMeta(ids){
   meta={};

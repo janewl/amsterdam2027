@@ -82,7 +82,9 @@ function markDone(key){ progress[key]=true; paint(); saveProgress(); }
 let storeReady=null;
 async function start(s){
   if(!state.ready) toast("Kobler til lagringen …");
-  await storeReady; startSession(s);
+  await storeReady;
+  if(progress[s.key]&&!confirm("Denne økta er allerede fullført. Vil du logge den på nytt?")) return;
+  startSession(s);
 }
 
 // ---------- today / resume ----------
@@ -148,7 +150,7 @@ try{
 }catch(e){}
 renderPlan();
 initExerciseDialog();
-initSession({markDone,onClose:()=>renderToday()});
+initSession({markDone,onClose:()=>renderToday(),isDone:k=>!!progress[k]});
 paint();
 onStoreState(onState);
 storeReady=initStore();

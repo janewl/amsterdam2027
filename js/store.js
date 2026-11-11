@@ -67,8 +67,15 @@ export const store={
 // Move anything saved in this browser into the cloud the first time you sign in.
 async function migrate(){
   const keys=localKeys(); if(!keys.length) return;
+  // Empty, unfinished sessions left in this browser are dropped, so signing in never brings back a stale session.
+  const isEmptyActive=v=>v&&v.status==="active"&&!(v.items||[]).some(it=>it.sets.some(x=>x.done||x.reps!=null||x.sec!=null||x.m!=null));
   for(const k of keys){
     const v=lget(k); if(v==null) continue;
+    if(k.startsWith("sessions/")&&isEmptyActive(v)) continue;
+    if(k==="state/active"){
+      const ls=v.id&&lget("sessions/"+v.id);
+      if(!ls||isEmptyActive(ls)) continue;
+    }
     if(k==="state/progress"){
       const c=await cloud.get(k)||{};
       await cloud.set(k,{done:{...(v.done||{}),...(c.done||{})},updated:Date.now()});
