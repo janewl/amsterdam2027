@@ -133,6 +133,10 @@ body.okt-open{overflow:hidden}
 .okt-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .okt-hint{color:var(--muted);font-size:.9rem}
 .okt-list{display:grid;gap:12px}
+.donesets{margin:0;padding-left:1.6em;display:grid;gap:3px;font-variant-numeric:tabular-nums}
+.donesets li::marker{color:var(--muted)}
+.viewnote{font-size:.92rem;color:var(--muted);margin:0}
+.viewnote b{color:var(--ink);font-weight:600}
 .okt-confirm{background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px;display:grid;gap:10px}
 .xcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px;min-width:0}
 .xcard.done{border-color:var(--done);box-shadow:inset 4px 0 0 var(--done)}
@@ -423,11 +427,12 @@ body.okt-open{overflow:hidden}
       <div class="okt-actions">
         <button type="button" class="btn ghost small" id="okt-back">Til planen</button>
         <button type="button" class="btn ghost small" id="okt-cancel">Avbryt</button>
+        <button type="button" class="btn ghost small" id="okt-reset" hidden>Tilbakestill økt</button>
         <button type="button" class="btn primary" id="okt-finish">Fullfør</button>
       </div>
     </div>
     <div id="okt-confirm" class="okt-confirm" role="alert" hidden></div>
-    <p class="okt-hint">Vektene er fylt inn fra forrige gang eller fra forslaget. Endre om nødvendig, og trykk ✓ når settet er ferdig. Da starter pausetimeren.</p>
+    <p class="okt-hint" id="okt-hint">Vektene er fylt inn fra forrige gang eller fra forslaget. Endre om nødvendig, og trykk ✓ når settet er ferdig. Da starter pausetimeren.</p>
     <div id="okt-list" class="okt-list"></div>
   </div>
 </section>

@@ -1,7 +1,7 @@
 import {weeks,PHASES,START,RACE,TOTAL,DAYNAME,DAYFULL,currentWeek,fmtRange,dateOf,sameDay} from "./plan.js";
 import {EX,exName,initExerciseDialog} from "./exercises.js";
 import {initStore,onStoreState,state,store,signIn,signOut} from "./store.js";
-import {initSession,startSession,openSession,getActive,toast} from "./session.js";
+import {initSession,startSession,openSession,viewSession,getActive,toast} from "./session.js";
 
 const $=id=>document.getElementById(id);
 const today=new Date(); today.setHours(0,0,0,0);
@@ -11,7 +11,7 @@ $("daysLeft").textContent=days>=0?days:"0";
 
 // ---------- plan ----------
 const TAGS={walk:["run","Aktiv hvile"],gym:["gym","Styrke"],run:["run","Løp"],q:["q","Kvalitet"],long:["long","Langtur"],race:["race","Løpsdag"]};
-const els={}, weekEls={}, byKey={};
+const els={}, weekEls={}, byKey={}, goBtns={};
 let progress={};
 
 function renderPlan(){
@@ -48,8 +48,8 @@ function renderPlan(){
           s.ex.forEach(eid=>{const b=document.createElement("button");b.type="button";b.className="exbtn";b.dataset.ex=eid;b.textContent=exName(eid);ex.append(b);});
           txt.append(ex);
           const go=document.createElement("button"); go.type="button"; go.className="btn primary small startbtn"; go.textContent="Start økt";
-          go.addEventListener("click",()=>start(s));
-          txt.append(go);
+          go.addEventListener("click",()=>progress[s.key]?viewSession(s):start(s));
+          txt.append(go); goBtns[s.key]=go;
         }
         const wu=document.createElement("a"); wu.className="wu"; wu.href="#"+s.wu; wu.textContent="Oppvarming";
         txt.append(wu);
@@ -68,6 +68,7 @@ function renderPlan(){
 function paint(){
   let n=0;
   for(const k in els){const on=!!progress[k]; els[k].cb.checked=on; els[k].li.classList.toggle("is-done",on); if(on)n++;}
+  for(const k in goBtns){const on=!!progress[k], b=goBtns[k]; b.textContent=on?"Se økt":"Start økt"; b.classList.toggle("primary",!on); b.classList.toggle("ghost",on);}
   for(const w in weekEls){const W=weekEls[w]; const d=W.keys.filter(k=>progress[k]).length; W.count.textContent=`${d}/${W.keys.length}`; W.count.classList.toggle("full",d===W.keys.length);}
   $("doneCount").textContent=n;
   $("doneOf").textContent=`av ${TOTAL} økter fullført`;
@@ -76,15 +77,14 @@ function paint(){
 }
 function saveProgress(){ store.set("state/progress",{done:{...progress},updated:Date.now()}); }
 function markDone(key){ progress[key]=true; paint(); saveProgress(); }
+function unmark(key){ delete progress[key]; paint(); saveProgress(); }
 
 // Wait until we know whether you are signed in, so a session is never started in the browser
 // while your data is in the cloud (or the other way round).
 let storeReady=null;
 async function start(s){
   if(!state.ready) toast("Kobler til lagringen …");
-  await storeReady;
-  if(progress[s.key]&&!confirm("Denne økta er allerede fullført. Vil du logge den på nytt?")) return;
-  startSession(s);
+  await storeReady; startSession(s);
 }
 
 // ---------- today / resume ----------
@@ -150,7 +150,7 @@ try{
 }catch(e){}
 renderPlan();
 initExerciseDialog();
-initSession({markDone,onClose:()=>renderToday(),isDone:k=>!!progress[k]});
+initSession({markDone,unmark,onClose:()=>renderToday(),isDone:k=>!!progress[k]});
 paint();
 onStoreState(onState);
 storeReady=initStore();

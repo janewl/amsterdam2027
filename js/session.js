@@ -27,6 +27,16 @@ function setText(ex,s){
   if(t==="bw") return s.kg?`+${fk(s.kg)} kg × ${fk(s.reps)}`:`${fk(s.reps)}`;
   return s.kg==null?`${fk(s.reps)} reps`:`${fk(s.kg)} × ${fk(s.reps)}`;
 }
+// Full wording for the finished-session view, e.g. "42,5 kg × 8 reps".
+function viewSet(ex,s){
+  const t=ex.log.type, r=`${fk(s.reps)} reps`;
+  if(t==="time") return `${fk(s.sec)} sek`;
+  if(t==="dist") return `${fk(s.kg)} kg × ${fk(s.m)} m`;
+  if(t==="band") return `${s.band==="Uten strikk"?"Uten strikk":s.band+" strikk"} × ${r}`;
+  if(t==="reps") return r;
+  if(s.kg==null||(t==="bw"&&!s.kg)) return r;
+  return `${t==="bw"||ex.log.kgLabel?"+":""}${fk(s.kg)} kg${t==="db"?" per hånd":""} × ${r}`;
+}
 function lastText(id){
   const L=meta[id]&&meta[id].last; const ex=EX[id];
   if(!L||!L.sets||!L.sets.length) return "Ingen logg ennå.";
@@ -142,7 +152,15 @@ export async function startSession(sess){
 export async function openSession(s){ S=s; await loadMeta(S.items.map(i=>i.ex)); show(); }
 
 // ---------- rendering ----------
+let HINT="";
+function mode(view){
+  $("okt-cancel").hidden=view; $("okt-finish").hidden=view; $("okt-reset").hidden=!view;
+  if(!HINT) HINT=$("okt-hint").textContent;
+  $("okt-hint").textContent=view?"Dette er det du logget. Trykk på en øvelse for å se teknikken.":HINT;
+  $("okt").setAttribute("aria-label",view?"Fullført økt":"Aktiv økt");
+}
 function show(){
+  mode(false);
   $("okt-eyebrow").textContent=`Uke ${S.w} · ${DAYFULL[S.d]}`;
   $("okt-title").textContent=S.title;
   $("okt-confirm").hidden=true;
@@ -261,7 +279,7 @@ function confirmBox(text,yes,yesLabel,noLabel){
 }
 async function finish(){
   stopTimer();
-  S.status="done"; S.finished=Date.now(); save(true);
+  S.status="done"; S.finished=Date.now();
   for(const it of S.items){
     // A finished set with an empty weight inherits the weight of the set before it.
     let prevKg=null;
@@ -269,6 +287,7 @@ async function finish(){
     const done=it.sets.filter(s=>s.done);
     if(done.length) store.merge("exercises/"+it.ex,{last:{date:S.finished,w:S.w,session:S.id,rx:it.rx,sets:done.map(({done,...r})=>r)}});
   }
+  save(true);
   store.set("state/active",{id:null});
   hooks.markDone&&hooks.markDone(S.key);
   S=null; hide(); toast("Økta er lagret. Bra jobba!");
@@ -282,6 +301,66 @@ function onCancel(){
   confirmBox("Vil du slette denne økta? Alt du har logget i økta forsvinner. Notatene dine blir liggende.",async()=>{
     stopTimer(); store.del("sessions/"+S.id); store.set("state/active",{id:null}); S=null; hide(); toast("Økta er slettet.");
   },"Slett økta","Fortsett økta");
+}
+
+
+// ---------- finished session (read only) ----------
+let V=null; // {sess, found:[sessions with this key that are done]}
+async function doneSessionsFor(key){
+  const all=await store.list("sessions");
+  return all.filter(x=>x.key===key&&x.status==="done").sort((a,b)=>(b.finished||0)-(a.finished||0));
+}
+export async function viewSession(sess){
+  const found=await doneSessionsFor(sess.key);
+  V={sess,found};
+  const L=found[0];
+  if(L) await loadMeta(L.items.map(i=>i.ex)); else meta={};
+  mode(true);
+  $("okt-confirm").hidden=true;
+  $("okt-eyebrow").textContent=`Uke ${sess.w} · ${DAYFULL[sess.d]}`;
+  $("okt-title").textContent=sess.title;
+  clearInterval(clockT);
+  if(L){
+    const min=L.finished&&L.started?Math.round((L.finished-L.started)/60000):null;
+    $("okt-clock").textContent=`Fullført ${fmtDate(L.finished||L.started)}`+(min!=null&&min<600?` · ${min<60?min+" min":Math.floor(min/60)+" t "+(min%60)+" min"}`:"");
+  } else $("okt-clock").textContent="Krysset av i planen";
+  const list=$("okt-list"); list.textContent="";
+  if(!L){
+    list.append(el("p","viewnote","Det finnes ingen logg for denne økta. Den ble krysset av i planen uten at settene ble logget. Tilbakestill økta hvis du vil logge den."));
+  } else L.items.forEach(it=>{
+    const ex=EX[it.ex]; const c=el("article","xcard"+(it.sets.some(x=>x.done)?" done":""));
+    const head=el("div","xhead");
+    const nm=el("button","xname",ex.n); nm.type="button"; nm.dataset.ex=it.ex; nm.title="Se hvordan øvelsen gjøres";
+    const how=el("button","howbtn","Teknikk"); how.type="button"; how.dataset.ex=it.ex;
+    head.append(nm,el("span","rx",rxText(ex,it.rx)),how); c.append(head);
+    const done=it.sets.filter(x=>x.done);
+    if(done.length){ const ol=el("ol","donesets"); done.forEach(x=>ol.append(el("li","",viewSet(ex,x)))); c.append(ol); }
+    else c.append(el("p","viewnote","Ingen sett krysset av."));
+    const note=meta[it.ex]&&meta[it.ex].note;
+    if(note){ const p=el("p","viewnote"); p.append(el("b","","Notat: "),document.createTextNode(note)); c.append(p); }
+    list.append(c);
+  });
+  $("okt").hidden=false; document.body.classList.add("okt-open"); $("okt").scrollTop=0;
+}
+
+// Deletes the logged session(s) for this day, unticks it, and points "forrige gang" back to the session before.
+async function resetSession(){
+  const {sess,found}=V, ids=new Set(found.map(x=>x.id));
+  const exIds=[...new Set(found.flatMap(x=>x.items.map(i=>i.ex)))];
+  found.forEach(x=>store.del("sessions/"+x.id));
+  const rest=(await store.list("sessions")).filter(x=>!ids.has(x.id)&&x.status==="done").sort((a,b)=>(b.finished||0)-(a.finished||0));
+  for(const id of exIds){
+    const m=await store.get("exercises/"+id)||{};
+    if(m.last&&m.last.session&&!ids.has(m.last.session)) continue; // "forrige gang" is from another day: leave it
+    let last=null;
+    for(const x of rest){ const it=x.items.find(i=>i.ex===id); const d=it&&it.sets.filter(s=>s.done); if(d&&d.length){ last={date:x.finished,w:x.w,session:x.id,rx:it.rx,sets:d.map(({done,...r})=>r)}; break; } }
+    store.merge("exercises/"+id,{last});
+  }
+  hooks.unmark&&hooks.unmark(sess.key);
+  V=null; hide(); toast("Økta er tilbakestilt.");
+}
+function onReset(){
+  confirmBox("Vil du tilbakestille økta? Det du logget slettes for godt, og økta blir ukrysset i planen. Notatene dine blir liggende.",resetSession,"Tilbakestill","Avbryt");
 }
 
 // ---------- rest timer ----------
@@ -334,6 +413,7 @@ export function initSession(h){
   hooks=h||{};
   $("okt-finish").addEventListener("click",onFinish);
   $("okt-cancel").addEventListener("click",onCancel);
+  $("okt-reset").addEventListener("click",onReset);
   $("okt-back").addEventListener("click",()=>{ save(true); hide(); });
   $("timer-minus").addEventListener("click",()=>adjustTimer(-15));
   $("timer-plus").addEventListener("click",()=>adjustTimer(15));
