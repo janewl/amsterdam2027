@@ -1,3 +1,5 @@
+// Pallof press, dead bug og farmer's walk er tatt ut av planen, men ligger fortsatt i exercises.js
+// så gamle økter og logger vises som før.
 // Ukeplan: faser, løpeøkter, styrkeøkter og resept (sett, reps, RIR) per øvelse.
 import {EX} from "./exercises.js";
 
@@ -100,14 +102,14 @@ function gym(w){
 }
 
 export const MON=["squat","rdl","bulg","hipthrust","calf","calfsit","cph"];
-export const WED=["bench","pullup","row","ohp","facepull","pullapart","pallof","deadbug"];
-export const THU=["deadlift","stepup","dbrow","pushup","slrdl","sideplank","farmer"];
+export const WED=["bench","pullup","row","ohp","facepull","pullapart","bridgemarch","cablecrunch"];
+export const THU=["deadlift","stepup","dbrow","pushup","slrdl","sideplank","hipabd"];
 function exFor(w,s){
   if(s.k!=="gym") return [];
   const p=phaseOf(w);
   if(w===0) return s.d==="ons"?WED:s.d==="fre"?["squat","bulg","calf"]:[];
-  if(w===48) return s.d==="man"?MON:["deadbug","pullapart","calf"];
-  if(w===49) return ["calf","bulg","deadbug"];
+  if(w===48) return s.d==="man"?MON:["bridgemarch","pullapart","calf"];
+  if(w===49) return ["calf","bulg","bridgemarch"];
   if(s.d==="man") return ((p===2&&w>=17)||p===3?["boxjump","hop"]:[]).concat(MON);
   if(s.d==="ons") return p>=3?WED.concat(["stepup","calf","cph"]):WED;
   if(s.d==="tor") return THU;
