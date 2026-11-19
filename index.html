@@ -38,6 +38,9 @@ header{display:grid;gap:18px}
 .fact b{font-family:var(--display);font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
 .fact span{color:var(--muted);font-size:.85rem}
 .bar{height:8px;border-radius:99px;background:var(--soft);overflow:hidden}
+.barrow{display:flex;align-items:center;gap:10px}
+.barrow .bar{flex:1}
+.pct{font-weight:700;font-variant-numeric:tabular-nums;font-size:.95rem;min-width:3.2em;text-align:right}
 .bar i{display:block;height:100%;width:0;background:var(--done);transition:width .3s}
 nav{display:flex;flex-wrap:wrap;gap:8px}
 nav a{font-family:var(--display);font-weight:600;letter-spacing:.04em;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 14px}
@@ -186,7 +189,7 @@ body.okt-open{overflow:hidden}
       <div class="fact"><b>2:00:00</b><span>måltid · 5:41 min/km</span></div>
       <div class="fact"><b id="doneCount">0</b><span id="doneOf">av – økter fullført</span></div>
     </div>
-    <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+    <div class="barrow"><div class="bar" aria-hidden="true"><i id="bar"></i></div><span class="pct" id="pct">0 %</span></div>
     <div class="acct" id="acct"><span>Laster …</span></div>
     <p class="acct-err" id="acct-err" role="alert" hidden></p>
     <div id="today"></div>

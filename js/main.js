@@ -73,6 +73,8 @@ function paint(){
   $("doneCount").textContent=n;
   $("doneOf").textContent=`av ${TOTAL} økter fullført`;
   $("bar").style.width=(n/TOTAL*100).toFixed(1)+"%";
+  const pct=n/TOTAL*100;
+  $("pct").textContent=(n&&pct<1?"<1":Math.round(pct))+"\u00a0%";
   renderToday();
 }
 function saveProgress(){ store.set("state/progress",{done:{...progress},updated:Date.now()}); }
