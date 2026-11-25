@@ -104,7 +104,40 @@ function gym(w){
 export const MON=["squat","rdl","bulg","hipthrust","calf","calfsit","cph"];
 export const WED=["bench","pullup","row","ohp","facepull","pullapart","bridgemarch","cablecrunch"];
 export const THU=["deadlift","stepup","dbrow","pushup","slrdl","sideplank","hipabd"];
-function exFor(w,s){
+// Supersett: to øvelser som ikke bruker de samme musklene, gjort annenhver gang.
+// Knebøy og markløft står alene fordi de trenger full pause. Paringen bestemmer bare rekkefølgen og
+// visningen; ingenting om parene lagres i databasen.
+export const PAIRS={
+  man:[["rdl","cph"],["bulg","calfsit"],["hipthrust","calf"]],
+  ons:[["bench","pullup"],["row","ohp"],["facepull","cablecrunch"],["pullapart","bridgemarch"]],
+  tor:[["stepup","dbrow"],["pushup","slrdl"],["sideplank","hipabd"]]
+};
+export function partnerOf(day,id){
+  for(const p of PAIRS[day]||[]){ if(p[0]===id) return p[1]; if(p[1]===id) return p[0]; }
+  return null;
+}
+/** Splits a day's exercise list into groups: [id] alone or [a,b] as a superset, keeping the given order. */
+export function groupsOf(day,ids){
+  const out=[];
+  for(let i=0;i<ids.length;i++){
+    if(i+1<ids.length&&partnerOf(day,ids[i])===ids[i+1]){ out.push([ids[i],ids[i+1]]); i++; }
+    else out.push([ids[i]]);
+  }
+  return out;
+}
+// Moves each exercise's superset partner up next to it.
+function paired(day,ids){
+  const out=[], used=new Set();
+  ids.forEach(id=>{
+    if(used.has(id)) return;
+    out.push(id); used.add(id);
+    const p=partnerOf(day,id);
+    if(p&&ids.includes(p)&&!used.has(p)){ out.push(p); used.add(p); }
+  });
+  return out;
+}
+function exFor(w,s){ return paired(s.d,exList(w,s)); }
+function exList(w,s){
   if(s.k!=="gym") return [];
   const p=phaseOf(w);
   if(w===0) return s.d==="ons"?WED:s.d==="fre"?["squat","bulg","calf"]:[];

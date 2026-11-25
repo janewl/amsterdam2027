@@ -1,6 +1,6 @@
 // Aktiv økt: logging av sett, notater, forslag til vekt og pausetimer.
 import {EX,BANDS,openExercise} from "./exercises.js";
-import {LIGHT,phaseOf,prescribe,DAYFULL,fmtDate} from "./plan.js";
+import {LIGHT,phaseOf,prescribe,DAYFULL,fmtDate,groupsOf,partnerOf} from "./plan.js";
 import {store} from "./store.js";
 
 const $=id=>document.getElementById(id);
@@ -181,14 +181,28 @@ function tickClock(){
 }
 function el(tag,cls,text){const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e;}
 
-function render(){
-  const list=$("okt-list"); list.textContent="";
-  S.items.forEach((it,ii)=>list.append(card(it,ii)));
+// Lays the cards out with each superset in its own box, labelled A, B, C … and A1/A2 on the cards.
+function layout(list,day,items,make){
+  list.textContent="";
+  let i=0, n=0;
+  groupsOf(day,items.map(x=>x.ex)).forEach(g=>{
+    if(g.length===1){ list.append(make(items[i],i,null)); i++; return; }
+    const L=String.fromCharCode(65+n++);
+    const box=el("section","ssgroup"); box.setAttribute("aria-label",`Supersett ${L}`);
+    const h=el("div","sshead"); h.append(el("b","",`Supersett ${L}`),el("span","","Veksle: ett sett av hver, kort pause mellom"));
+    box.append(h);
+    g.forEach((_,k)=>{ box.append(make(items[i],i,L+(k+1))); i++; });
+    list.append(box);
+  });
 }
-function card(it,ii){
+function render(){ layout($("okt-list"),S.d,S.items,card); }
+function ssTag(tag){ return tag?el("span","sstag",tag):null; }
+function card(it,ii,tag){
+  if(tag===undefined){ const o=document.querySelector(`.xcard[data-i="${ii}"] .sstag`); tag=o?o.textContent:null; }
   const ex=EX[it.ex], t=ex.log.type, m=meta[it.ex]||{};
   const c=el("article","xcard"); c.dataset.i=ii;
   const head=el("div","xhead");
+  if(tag) head.append(ssTag(tag));
   const nm=el("button","xname",ex.n); nm.type="button"; nm.dataset.ex=it.ex; nm.title="Se hvordan øvelsen gjøres";
   const how=el("button","howbtn","Teknikk"); how.type="button"; how.dataset.ex=it.ex;
   head.append(nm,el("span","rx",rxText(ex,it.rx)),how);
@@ -260,12 +274,25 @@ function setRow(it,ii,s,si,two){
     if(s.done){
       // Fill an empty count with the target so a quick tap still logs something sensible.
       if(t==="time"&&s.sec==null) s.sec=hi; else if(t==="dist"&&s.m==null) s.m=hi; else if(t!=="time"&&t!=="dist"&&s.reps==null) s.reps=hi;
-      startTimer(ex.log.rest, ex.n);
+      restAfter(it,ii);
     }
     save(); rerenderCard(ii);
   });
   row.append(chk);
   return row;
+}
+
+// In a superset the pause after a set is short, then it is the other exercise's turn. When the partner has
+// no sets left, the exercise gets its normal pause.
+function ssRest(rest){ return Math.min(75,Math.max(45,Math.round(rest*0.5/15)*15)); }
+function restAfter(it,ii){
+  const ex=EX[it.ex], p=partnerOf(S.d,it.ex);
+  const j=p==null?-1:(S.items[ii+1]&&S.items[ii+1].ex===p?ii+1:S.items[ii-1]&&S.items[ii-1].ex===p?ii-1:-1);
+  const o=j<0?null:S.items[j];
+  const next=o?o.sets.findIndex(x=>!x.done):-1;
+  if(next<0){ startTimer(ex.log.rest, ex.n); return; }
+  startTimer(ssRest(ex.log.rest), "neste: "+EX[o.ex].n);
+  setTimeout(()=>{ const r=document.getElementById(`s-${j}-${next}-`+({band:"band",time:"sec",reps:"reps"}[EX[o.ex].log.type]||"kg")); if(r) r.closest(".setrow").scrollIntoView({behavior:"smooth",block:"center"}); },60);
 }
 
 // ---------- finish / cancel ----------
@@ -327,9 +354,9 @@ export async function viewSession(sess){
   const list=$("okt-list"); list.textContent="";
   if(!L){
     list.append(el("p","viewnote","Det finnes ingen logg for denne økta. Den ble krysset av i planen uten at settene ble logget. Tilbakestill økta hvis du vil logge den."));
-  } else L.items.forEach(it=>{
+  } else { layout(list,L.d,L.items,(it,_,tag)=>{
     const ex=EX[it.ex]; const c=el("article","xcard"+(it.sets.some(x=>x.done)?" done":""));
-    const head=el("div","xhead");
+    const head=el("div","xhead"); if(tag) head.append(ssTag(tag));
     const nm=el("button","xname",ex.n); nm.type="button"; nm.dataset.ex=it.ex; nm.title="Se hvordan øvelsen gjøres";
     const how=el("button","howbtn","Teknikk"); how.type="button"; how.dataset.ex=it.ex;
     head.append(nm,el("span","rx",rxText(ex,it.rx)),how); c.append(head);
@@ -338,8 +365,8 @@ export async function viewSession(sess){
     else c.append(el("p","viewnote","Ingen sett krysset av."));
     const note=meta[it.ex]&&meta[it.ex].note;
     if(note){ const p=el("p","viewnote"); p.append(el("b","","Notat: "),document.createTextNode(note)); c.append(p); }
-    list.append(c);
-  });
+    return c;
+  }); }
   $("okt").hidden=false; document.body.classList.add("okt-open"); $("okt").scrollTop=0;
 }
 

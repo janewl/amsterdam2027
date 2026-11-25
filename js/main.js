@@ -1,4 +1,4 @@
-import {weeks,PHASES,START,RACE,TOTAL,DAYNAME,DAYFULL,currentWeek,fmtRange,dateOf,sameDay} from "./plan.js";
+import {weeks,PHASES,START,RACE,TOTAL,DAYNAME,DAYFULL,currentWeek,fmtRange,dateOf,sameDay,groupsOf} from "./plan.js";
 import {EX,exName,initExerciseDialog} from "./exercises.js";
 import {initStore,onStoreState,state,store,signIn,signOut} from "./store.js";
 import {initSession,startSession,openSession,viewSession,getActive,toast} from "./session.js";
@@ -45,7 +45,14 @@ function renderPlan(){
         txt.append(t,info);
         if(s.ex.length){
           const ex=document.createElement("div"); ex.className="exs";
-          s.ex.forEach(eid=>{const b=document.createElement("button");b.type="button";b.className="exbtn";b.dataset.ex=eid;b.textContent=exName(eid);ex.append(b);});
+          const chip=eid=>{const b=document.createElement("button");b.type="button";b.className="exbtn";b.dataset.ex=eid;b.textContent=exName(eid);return b;};
+          let n=0;
+          groupsOf(s.d,s.ex).forEach(g=>{
+            if(g.length===1){ ex.append(chip(g[0])); return; }
+            const grp=document.createElement("span"); grp.className="exss"; grp.title="Supersett: veksle mellom øvelsene";
+            const L=document.createElement("b"); L.textContent=String.fromCharCode(65+n++);
+            grp.append(L,chip(g[0]),document.createTextNode("+"),chip(g[1])); ex.append(grp);
+          });
           txt.append(ex);
           const go=document.createElement("button"); go.type="button"; go.className="btn primary small startbtn"; go.textContent="Start økt";
           go.addEventListener("click",()=>progress[s.key]?viewSession(s):start(s));

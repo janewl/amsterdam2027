@@ -92,6 +92,8 @@ ul.plain{margin:0;padding-left:1.2em;display:grid;gap:4px}
 .callout{border-left:3px solid var(--accent);padding:4px 0 4px 12px;color:var(--ink)}
 .muted{color:var(--muted)}
 .exs{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.exss{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;border:1px dashed var(--line);border-radius:99px;padding:1px 4px 1px 8px;color:var(--muted);font-size:.85rem}
+.exss b{font-family:var(--display);color:var(--iron)}
 .exbtn,.exlink{font:inherit;font-size:.85rem;color:var(--iron);background:var(--soft);border:1px solid transparent;border-radius:99px;padding:2px 10px;cursor:pointer}
 .exbtn:hover,.exbtn:focus-visible,.exlink:hover,.exlink:focus-visible{border-color:var(--iron);outline:none}
 .exlink{font-size:inherit;padding:1px 8px;text-align:left}
@@ -147,6 +149,11 @@ body.okt-open{overflow:hidden}
 .viewnote{font-size:.92rem;color:var(--muted);margin:0}
 .viewnote b{color:var(--ink);font-weight:600}
 .okt-confirm{background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px;display:grid;gap:10px}
+.ssgroup{display:grid;gap:8px;border:2px dashed var(--line);border-radius:14px;padding:10px}
+.sshead{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;padding:0 4px}
+.sshead b{font-family:var(--display);font-size:1.15rem;color:var(--iron)}
+.sshead span{font-size:.88rem;color:var(--muted)}
+.sstag{font-family:var(--display);font-weight:700;font-size:1rem;line-height:1.3;color:var(--on-accent);background:var(--iron);border-radius:6px;padding:1px 7px;align-self:center}
 .xcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px;min-width:0}
 .xcard.done{border-color:var(--done);box-shadow:inset 4px 0 0 var(--done)}
 .xhead{display:flex;gap:6px 12px;align-items:baseline;flex-wrap:wrap}
@@ -214,36 +221,37 @@ body.okt-open{overflow:hidden}
   <section id="styrke">
     <h2>Styrkeprogram</h2>
     <p class="muted">RIR betyr reps i reserve: hvor mange reps du har igjen når settet er ferdig. Øk vekten når du klarer øverste antall reps med riktig RIR.</p>
+    <p class="muted">Øvelser merket A1 og A2 er et supersett: ta ett sett av A1, hvil 45–75 sekunder, ta ett sett av A2, hvil, og gjenta. Parene bruker ulike muskler, så du får samme effekt på kortere tid. Knebøy og markløft står alene med full pause. Pausetimeren i økta veksler automatisk.</p>
     <div class="card">
       <h3>Mandag: Bein (tung)</h3>
       <div class="tbl"><table>
         <thead><tr><th>Øvelse</th><th>Sett × reps</th><th>RIR</th><th>Kommentar</th></tr></thead>
         <tbody>
           <tr><td>Knebøy (eller beinpress)</td><td class="n">4 × 5–6</td><td class="n">2</td><td>Hovedløftet</td></tr>
-          <tr><td>Rumensk markløft</td><td class="n">3 × 8</td><td class="n">2</td><td>Baksiden av lår og hofte</td></tr>
-          <tr><td>Bulgarske utfall</td><td class="n">3 × 8 per bein</td><td class="n">2</td><td>Viktigste løpeøvelse</td></tr>
-          <tr><td>Hip thrust</td><td class="n">3 × 10</td><td class="n">1–2</td><td>Setemuskler</td></tr>
-          <tr><td>Tåhev, strake knær</td><td class="n">3 × 12</td><td class="n">1</td><td>Legg</td></tr>
-          <tr><td>Tåhev, bøyde knær (sittende)</td><td class="n">3 × 15</td><td class="n">1</td><td>Avlaster akillessenen</td></tr>
-          <tr><td>Copenhagen-planke</td><td class="n">3 × 20–30 sek per side</td><td class="n">–</td><td>Innside lår og lyske</td></tr>
+          <tr><td><span class="sstag">A1</span> Rumensk markløft</td><td class="n">3 × 8</td><td class="n">2</td><td>Baksiden av lår og hofte</td></tr>
+          <tr><td><span class="sstag">A2</span> Copenhagen-planke</td><td class="n">3 × 20–30 sek per side</td><td class="n">–</td><td>Innside lår og lyske</td></tr>
+          <tr><td><span class="sstag">B1</span> Bulgarske utfall</td><td class="n">3 × 8 per bein</td><td class="n">2</td><td>Viktigste løpeøvelse</td></tr>
+          <tr><td><span class="sstag">B2</span> Tåhev, bøyde knær (sittende)</td><td class="n">3 × 15</td><td class="n">1</td><td>Avlaster akillessenen</td></tr>
+          <tr><td><span class="sstag">C1</span> Hip thrust</td><td class="n">3 × 10</td><td class="n">1–2</td><td>Setemuskler</td></tr>
+          <tr><td><span class="sstag">C2</span> Tåhev, strake knær</td><td class="n">3 × 12</td><td class="n">1</td><td>Legg</td></tr>
         </tbody></table></div>
-      <p class="muted">Ca. 60 min. Fra mars: start med 3 × 5 bokshopp og 3 × 6 hopp på ett bein.</p>
+      <p class="muted">Ca. 45–50 min. Fra mars: start med 3 × 5 bokshopp og 3 × 6 hopp på ett bein.</p>
     </div>
     <div class="card">
       <h3>Onsdag: Overkropp og kjerne</h3>
       <div class="tbl"><table>
         <thead><tr><th>Øvelse</th><th>Sett × reps</th><th>RIR</th><th>Kommentar</th></tr></thead>
         <tbody>
-          <tr><td>Benkpress eller manualpress</td><td class="n">4 × 6–8</td><td class="n">2</td><td></td></tr>
-          <tr><td>Pull-ups med strikk eller nedtrekk</td><td class="n">4 × 6–10</td><td class="n">2</td><td></td></tr>
-          <tr><td>Sittende roing med kabel</td><td class="n">3 × 10–12</td><td class="n">2</td><td>Øvre rygg</td></tr>
-          <tr><td>Skulderpress med manualer</td><td class="n">3 × 8–10</td><td class="n">2</td><td></td></tr>
-          <tr><td>Face pulls</td><td class="n">3 × 15</td><td class="n">1</td><td>Mot spenningshodepine</td></tr>
-          <tr><td>Band pull-aparts</td><td class="n">2 × 20</td><td class="n">–</td><td>Gjerne mellom settene</td></tr>
-          <tr><td>Marsjerende seteløft</td><td class="n">3 × 8–12 per bein</td><td class="n">–</td><td>Stabilitet i hofter og kjerne</td></tr>
-          <tr><td>Kabel-crunch</td><td class="n">3 × 12–15</td><td class="n">2</td><td>Fremside av magen</td></tr>
+          <tr><td><span class="sstag">A1</span> Benkpress eller manualpress</td><td class="n">4 × 6–8</td><td class="n">2</td><td></td></tr>
+          <tr><td><span class="sstag">A2</span> Pull-ups med strikk eller nedtrekk</td><td class="n">4 × 6–10</td><td class="n">2</td><td></td></tr>
+          <tr><td><span class="sstag">B1</span> Sittende roing med kabel</td><td class="n">3 × 10–12</td><td class="n">2</td><td>Øvre rygg</td></tr>
+          <tr><td><span class="sstag">B2</span> Skulderpress med manualer</td><td class="n">3 × 8–10</td><td class="n">2</td><td></td></tr>
+          <tr><td><span class="sstag">C1</span> Face pulls</td><td class="n">3 × 15</td><td class="n">1</td><td>Mot spenningshodepine</td></tr>
+          <tr><td><span class="sstag">C2</span> Kabel-crunch</td><td class="n">3 × 12–15</td><td class="n">2</td><td>Fremside av magen</td></tr>
+          <tr><td><span class="sstag">D1</span> Band pull-aparts</td><td class="n">2 × 20</td><td class="n">–</td><td></td></tr>
+          <tr><td><span class="sstag">D2</span> Marsjerende seteløft</td><td class="n">3 × 8–12 per bein</td><td class="n">–</td><td>Stabilitet i hofter og kjerne</td></tr>
         </tbody></table></div>
-      <p class="muted">Ca. 50–60 min.</p>
+      <p class="muted">Ca. 40–45 min.</p>
     </div>
     <div class="card">
       <h3>Torsdag: Helkropp (lett)</h3>
@@ -251,14 +259,14 @@ body.okt-open{overflow:hidden}
         <thead><tr><th>Øvelse</th><th>Sett × reps</th><th>RIR</th><th>Kommentar</th></tr></thead>
         <tbody>
           <tr><td>Markløft (konvensjonell eller trap bar)</td><td class="n">3 × 4–5</td><td class="n">3–4</td><td>Moderat vekt, god teknikk</td></tr>
-          <tr><td>Step-ups på kasse</td><td class="n">3 × 8 per bein</td><td class="n">3</td><td>Kontrollert ned</td></tr>
-          <tr><td>Enarms manualroing</td><td class="n">3 × 10 per side</td><td class="n">2</td><td></td></tr>
-          <tr><td>Push-ups eller skråbenk med manualer</td><td class="n">3 × 10–12</td><td class="n">2</td><td></td></tr>
-          <tr><td>Ettbeins rumensk markløft</td><td class="n">2 × 8 per bein</td><td class="n">3</td><td>Balanse og stabilitet</td></tr>
-          <tr><td>Sidebro</td><td class="n">3 × 30 sek per side</td><td class="n">–</td><td></td></tr>
-          <tr><td>Hofteabduksjon i kabel</td><td class="n">3 × 12–15 per bein</td><td class="n">2</td><td>Setemuskel på siden. Beskytter knær og hofter når du løper</td></tr>
+          <tr><td><span class="sstag">A1</span> Step-ups på kasse</td><td class="n">3 × 8 per bein</td><td class="n">3</td><td>Kontrollert ned</td></tr>
+          <tr><td><span class="sstag">A2</span> Enarms manualroing</td><td class="n">3 × 10 per side</td><td class="n">2</td><td></td></tr>
+          <tr><td><span class="sstag">B1</span> Push-ups eller skråbenk med manualer</td><td class="n">3 × 10–12</td><td class="n">2</td><td></td></tr>
+          <tr><td><span class="sstag">B2</span> Ettbeins rumensk markløft</td><td class="n">2 × 8 per bein</td><td class="n">3</td><td>Balanse og stabilitet</td></tr>
+          <tr><td><span class="sstag">C1</span> Sidebro</td><td class="n">3 × 30 sek per side</td><td class="n">–</td><td></td></tr>
+          <tr><td><span class="sstag">C2</span> Hofteabduksjon i kabel</td><td class="n">3 × 12–15 per bein</td><td class="n">2</td><td>Setemuskel på siden. Beskytter knær og hofter når du løper</td></tr>
         </tbody></table></div>
-      <p class="muted">Ca. 45 min. Du skal gå ut med følelsen av at du kunne gjort mer.</p>
+      <p class="muted">Ca. 35 min. Du skal gå ut med følelsen av at du kunne gjort mer.</p>
     </div>
     <div class="card">
       <h3>Endringer gjennom året</h3>
